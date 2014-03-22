@@ -1,0 +1,5 @@
+lua if not isrec then printf("lol")end
+
+ptpcam --chdk="upload Loppen.lua A/CHDK/SCRIPTS/loppen.lua"
+
+ptpcam --chdk="lua require('lptpgui').exec_luafile([[A/CHDK/SCRIPTS/loppen.lua]])"
