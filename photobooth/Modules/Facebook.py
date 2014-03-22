@@ -21,6 +21,7 @@ class Facebook(object):
         token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
         self.facebook = GraphAPI(token[0])
         print ("facebook token expires at "+str(token[1]))
+        print ("token:"+str(token[0]))
         
 
     def uploadImage(self,messageStr,imagePath):
