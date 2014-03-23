@@ -64,6 +64,7 @@ class Photobooth(object):
         
         '''print photos'''
         #self.printer.printPhotoStrip(image_paths)
+        print "press s to shoot"
         
 def main():
     photobooth=Photobooth()
