@@ -34,7 +34,7 @@ class Facebook(object):
                                    message=messageStr
                                    )
             except:
-                print"facebook error, try #{0}",tries
+                print("facebook error, try #"+str(tries))
                 time.sleep(500)
                 tries=tries+1
 

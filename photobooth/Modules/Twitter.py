@@ -35,7 +35,7 @@ class Twitter():
                                                       media = f
                                                       )
             except:
-                print"twitter error, try #{0}",tries
+                print("twitter error, try #"+str(tries))
                 time.sleep(500)
                 tries=tries+1
         print("finnished tweating\n")
