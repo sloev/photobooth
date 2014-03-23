@@ -33,6 +33,7 @@ class Facebook(object):
                                    source = open(imagePath),
                                    message=messageStr
                                    )
+                break
             except:
                 print("facebook error, try #"+str(tries))
                 time.sleep(500)

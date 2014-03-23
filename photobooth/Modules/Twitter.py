@@ -34,6 +34,7 @@ class Twitter():
                                                       status = messageStr,
                                                       media = f
                                                       )
+                break
             except:
                 print("twitter error, try #"+str(tries))
                 time.sleep(500)
