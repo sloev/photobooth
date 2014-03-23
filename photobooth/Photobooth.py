@@ -31,7 +31,7 @@ class Photobooth(object):
         self.printer=Printer()
         
         '''state thread'''
-        self.stateThread=threading.Thread(target=self.shoot())
+        self.stateThread=threading.Thread()
 
     def startShoot(self):
         if(not self.stateThread.is_alive()):
