@@ -26,7 +26,7 @@ class Facebook(object):
     def uploadImage(self,messageStr,imagePath):
         print("uploading to facebook")
         self.facebook.post(
-            path = 'Loppenbooth/photobooth',
+            path = 'Loppenbooth/photos',
             source = open(imagePath),
             message=messageStr
         )
