@@ -3,7 +3,6 @@ Created on Mar 19, 2014
 
 @author: johannes
 '''
-import datetime
 import twython,json
 
 class Twitter():
@@ -25,11 +24,11 @@ class Twitter():
             config["access_secret"]
             )        
         
-    def uploadImage(self,path):
+    def uploadImage(self,messageStr,path):
         print("uploading to twitter")
         f = open(path, 'rb')
         self.twitter.update_status_with_media(
-          status = "Testing"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'),
+          status = messageStr,
           media = f
           )
         print("finnished tweating\n")

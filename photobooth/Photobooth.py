@@ -9,6 +9,7 @@ from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
 from Modules.Printer import Printer
 import json,time,threading, sys, select
+import datetime
 
 
 class Photobooth(object):
@@ -47,15 +48,16 @@ class Photobooth(object):
     def shoot(self):
         '''chdk shooting and downloading'''
         photoDir=self.camera.captureReturnDir()
+        message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         
         '''make photoframe'''
         
         '''upload two first images to twitter'''
         imagePath=self.image_processor.composeForTwitter(photoDir)
-        self.twitter.uploadImage(imagePath)
+        self.twitter.uploadImage(message,imagePath)
         
         imagePath=self.image_processor.composeForFacebook(photoDir)
-        self.facebook.uploadImage(imagePath)
+        self.facebook.uploadImage(message,imagePath)
         
         '''make photostrip'''
        # image_paths=self.image_processor.composeForPrinter(photoDir)
