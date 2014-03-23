@@ -3,7 +3,7 @@ Created on Mar 19, 2014
 
 @author: johannes
 '''
-import twython,json
+import twython,json,time
 
 class Twitter():
     '''
@@ -27,10 +27,17 @@ class Twitter():
     def uploadImage(self,messageStr,path):
         print("uploading to twitter")
         f = open(path, 'rb')
-        self.twitter.update_status_with_media(
-          status = messageStr,
-          media = f
-          )
+        tries=0
+        while(tries<5):
+            try:
+                self.twitter.update_status_with_media(
+                                                      status = messageStr,
+                                                      media = f
+                                                      )
+            except:
+                print"twitter error, try #{0}",tries
+                time.sleep(500)
+                tries=tries+1
         print("finnished tweating\n")
 
 def main():

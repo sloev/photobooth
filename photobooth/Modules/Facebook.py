@@ -3,7 +3,7 @@ Created on Mar 21, 2014
 
 @author: johannes
 '''
-import json
+import json,time
 
 from facepy import GraphAPI
 from urlparse import parse_qs
@@ -25,11 +25,19 @@ class Facebook(object):
 
     def uploadImage(self,messageStr,imagePath):
         print("uploading to facebook")
-        self.facebook.post(
-            path = 'Loppenbooth/photos',
-            source = open(imagePath),
-            message=messageStr
-        )
+        tries=0
+        while(tries<5):
+            try:
+                self.facebook.post(
+                                   path = 'Loppenbooth/photos',
+                                   source = open(imagePath),
+                                   message=messageStr
+                                   )
+            except:
+                print"facebook error, try #{0}",tries
+                time.sleep(500)
+                tries=tries+1
+
         print("finnished uploading to facebook\n")
 
 
