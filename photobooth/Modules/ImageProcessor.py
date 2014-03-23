@@ -45,7 +45,7 @@ class ImageProcessor(object):
             bbox=img.getbbox()
             img=img.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
             img=img.resize((dim-10,dim-10))
-            img = ImageOps.autocontrast(img, cutoff=2)
+            #img = ImageOps.autocontrast(img, cutoff=2)
             img=ImageOps.grayscale(img)
             
             strip.paste(img,(posX,5))
@@ -72,7 +72,7 @@ class ImageProcessor(object):
             bbox=img.getbbox()
             img=img.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
             img=img.resize((dim-10,dim-10))
-            img = ImageOps.autocontrast(img, cutoff=2)
+            #img = ImageOps.autocontrast(img, cutoff=2)
             img=ImageOps.grayscale(img)
             strip.paste(img,(posX,posY))
             count=count+1        
