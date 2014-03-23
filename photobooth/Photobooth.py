@@ -5,6 +5,7 @@ Created on Mar 19, 2014
 '''
 from Modules.Camera import Camera
 from Modules.Twitter import Twitter
+from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
 from Modules.Printer import Printer
 import json,time,threading, sys, select
@@ -24,6 +25,7 @@ class Photobooth(object):
         with open('apiconfigs.txt', 'rb') as fp:
             config = json.load(fp)
         self.twitter=Twitter(config["twitter"])
+        self.facebook=Facebook(config["facebook"])
         self.image_processor=ImageProcessor()
         self.printer=Printer()
         
