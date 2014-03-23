@@ -7,7 +7,6 @@ import json
 
 from facepy import GraphAPI
 from urlparse import parse_qs
-import web
 
 import facepy
 
