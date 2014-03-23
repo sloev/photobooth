@@ -35,11 +35,12 @@ class Facebook(object):
 
 
 def main():
+    import os
     with open('apiconfigs.txt', 'rb') as fp:
         config = json.load(fp)
         print("got config")
         facebook=Facebook(config["facebook"])
-        facebook.uploadImage('lol hi lol','test.JPG')    
+        facebook.uploadImage('lol hi lol',os.getcwd()+'/pics/IMG_0001.JPG')    
 
 if __name__ == '__main__':
     main()
