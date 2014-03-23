@@ -47,17 +47,19 @@ class Photobooth(object):
         photoDir=self.camera.captureReturnDir()
         
         '''make photoframe'''
-
         
         '''upload two first images to twitter'''
         imagePath=self.image_processor.composeForTwitter(photoDir)
-        self.twitter.uploadImageToTwitter(imagePath)
+        self.twitter.uploadImage(imagePath)
+        
+        imagePath=self.image_processor.composeForFacebook(photoDir)
+        self.facebook.uploadImage(imagePath)
         
         '''make photostrip'''
-        image_paths=self.image_processor.composeForPrinter(photoDir)
+       # image_paths=self.image_processor.composeForPrinter(photoDir)
         
         '''print photos'''
-        self.printer.printPhotoStrip(image_paths)
+        #self.printer.printPhotoStrip(image_paths)
         
 def main():
     photobooth=Photobooth()
