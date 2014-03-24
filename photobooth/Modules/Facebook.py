@@ -22,7 +22,6 @@ class Facebook(object):
         print ("facebook token expires at "+str(token[1]))
         print ("token:"+str(token[0]))
         
-
     def uploadImage(self,messageStr,imagePath):
         print("uploading to facebook")
         tries=0

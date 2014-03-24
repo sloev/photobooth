@@ -9,10 +9,6 @@ class Twitter():
     '''
     classdocs
     '''
-    
-    
-    
-    
     def __init__(self,config):
         '''
         Constructor
