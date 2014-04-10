@@ -8,7 +8,9 @@ from Facebook import Facebook
 import json
 import threading
 import sched
-import time
+import os
+import time,datetime
+import glob
 
 class Uploader(object):
     '''
@@ -16,15 +18,23 @@ class Uploader(object):
 '''
 
 
-    def __init__(self):
+    def __init__(self,config=None):
         '''
         Constructor
         '''
-        #with open('apiconfigs.txt', 'rb') as fp:
-            #config = json.load(fp)
-            #self.twitter=Twitter(config["twitter"])
-            #self.facebook=Facebook(config["facebook"])
+        if config==None:
+            with open('apiconfigs.txt', 'rb') as fp:
+                config = json.load(fp)
             
+        self.twitter=Twitter(config["twitter"])
+        self.facebook=Facebook(config["facebook"])
+        
+        self.twitterMessage=config["twitter"]["message"]
+        self.facebookMessage=config["facebook"]["message"]
+            
+            
+        self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
+        
         self.Event=threading.Event()
         self.Event.set()
         
@@ -39,11 +49,36 @@ class Uploader(object):
     def upload(self):
         self.Event.wait(1)
         self.Event.clear()
-        print "lol"
-            
 
+        for targetFile in glob.glob(os.path.join(self.outgoingPath, '*.done')):
+            #print targetFile
+            currentTime=datetime.datetime.now()
+            currentTimeString=currentTime.strftime('%Y-%m-%d_%H:%M:%S.%f')
+            fileName=os.path.basename(targetFile)
+            print fileName
+            fileTime=datetime.datetime.strptime(fileName[:16], '%Y-%m-%d_%H-%M') 
+            print fileTime
+            if (currentTime - fileTime).total_seconds() > 20:
+            #if fileTime < datetime.datetime.now()-datetime.timedelta(seconds=20):
+                '''then upload'''
+                serviceName=fileName[17:len(fileName)-5]
+                if(serviceName=="twitter"):
+                    print "twitter done file found \nnow uploading"
+                    self.twitter.uploadImage(self.twitterMessage+" "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
+                    print "done"
+                elif(serviceName=="facebook"):
+                    print "facebook done file found\nnow uploading"
+                    self.facebook.uploadImage(self.facebookMessage+" "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
+                    print "done"
+                '''deleting'''
+                print "deleting"
+                os.remove(targetFile[:len(targetFile)-5]+".PNG")
+                os.remove(targetFile)
+                print "done"
+            else:
+                pass
         self.Event.set()
-        self.scheduler.enter(2, 1, self.upload,())
+        self.scheduler.enter(20, 1, self.upload,())
     
     def stopAll(self):
         map(self.scheduler.cancel,self.scheduler.queue)

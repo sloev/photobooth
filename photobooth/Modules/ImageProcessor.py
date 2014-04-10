@@ -21,7 +21,6 @@ class ImageProcessor(object):
         Constructor
         '''
         self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
-        self.dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
 
         self.twitterLayout={
                             "photoDim":750,
