@@ -12,7 +12,14 @@ import os
 import time,datetime
 import glob
 
-class Uploader(object):
+'''
+todo:
+make this class check for a .delete file and go directly to delete if it finds such a file
+this .delete file is created by another process
+
+'''
+
+class UploadServer(object):
     '''
     classdocs
 '''
@@ -86,7 +93,7 @@ class Uploader(object):
     
         
 def main():
-    up=Uploader()
+    up=UploadServer()
     try:
         while True:
             time.sleep(1)

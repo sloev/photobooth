@@ -8,8 +8,12 @@ from Modules.Twitter import Twitter
 from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
 from Modules.Printer import Printer
+from Modules.UploadServer import UploadServer
+
 import json,time,threading, sys, select
 import datetime
+import web
+
 
 
 class Photobooth(object):
@@ -29,6 +33,7 @@ class Photobooth(object):
         self.facebook=Facebook(config["facebook"])
         self.image_processor=ImageProcessor()
         self.printer=Printer()
+        self.uploader=UploadServer()
         
         '''state thread'''
         self.stateThread=threading.Thread()
@@ -43,6 +48,7 @@ class Photobooth(object):
             print("busy shooting")
         
     def stopShoot(self):
+        self.uploader.stopAll()
         self.stateThread.join()
 
     def shoot(self):
@@ -54,10 +60,10 @@ class Photobooth(object):
         
         '''upload two first images to twitter'''
         imagePath=self.image_processor.composeForTwitter(photoDir)
-        self.twitter.uploadImage(message,imagePath)
+        #self.twitter.uploadImage(message,imagePath)
         
         imagePath=self.image_processor.composeForFacebook(photoDir)
-        self.facebook.uploadImage(message,imagePath)
+        #self.facebook.uploadImage(message,imagePath)
         
         '''make photostrip'''
        # image_paths=self.image_processor.composeForPrinter(photoDir)
