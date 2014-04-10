@@ -57,9 +57,11 @@ class ImageProcessor(object):
         overlay=self.twitterLayout["overlay"]
         strip.paste(overlay,None,overlay)
         #path=os.path.join(imagedir, 'twitterStrip.PNG')
-        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-        path=os.path.join(self.outgoingPath,dateString+'_twitter.PNG')
-        strip.save(path, 'PNG')
+        path=self.saveImageToOutgoing(strip,"twitter")
+
+        #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        #path=os.path.join(self.outgoingPath,dateString+'_twitter.PNG')
+        #strip.save(path, 'PNG')
         print("\n")
         return path
     
@@ -85,12 +87,22 @@ class ImageProcessor(object):
         overlay=self.facebookLayout["overlay"]
         strip.paste(overlay,None,overlay)
         #path=os.path.join(imageDir, 'facebookStrip.PNG')
-        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-        path=os.path.join(self.outgoingPath,dateString+'_facebook.PNG')
-        strip.save(path, 'PNG')
+        path=self.saveImageToOutgoing(strip,"facebook")
+        #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        #path=os.path.join(self.outgoingPath,dateString+'_facebook.PNG')
+        #strip.save(path, 'PNG')
         print("\n")
         return path
     
+    def saveImageToOutgoing(self,image,serviceName):
+        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        path=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.PNG')
+        pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
+        image.save(path, 'PNG')
+        with open(pathDone, 'w') as doneFile:
+            doneFile.write('done')
+        return path
+
     def composeForPrinter(self,imageDir):
         print("composing For Printer")
         paths=["","",""]
