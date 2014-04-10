@@ -8,6 +8,7 @@ import ImageFont, ImageDraw, ImageOps,ImageChops
 import os,glob
 from Twitter import Twitter
 from Facebook import Facebook
+import datetime
 
 class ImageProcessor(object):
     '''
@@ -19,6 +20,9 @@ class ImageProcessor(object):
         '''
         Constructor
         '''
+        self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
+        self.dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+
         self.twitterLayout={
                             "photoDim":750,
                             "width":1600,
@@ -52,7 +56,9 @@ class ImageProcessor(object):
             count=count+1
         overlay=self.twitterLayout["overlay"]
         strip.paste(overlay,None,overlay)
-        path=os.path.join(imagedir, 'twitterStrip.PNG')
+        #path=os.path.join(imagedir, 'twitterStrip.PNG')
+        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        path=os.path.join(self.outgoingPath,dateString+'_twitter.PNG')
         strip.save(path, 'PNG')
         print("\n")
         return path
@@ -78,7 +84,9 @@ class ImageProcessor(object):
             count=count+1        
         overlay=self.facebookLayout["overlay"]
         strip.paste(overlay,None,overlay)
-        path=os.path.join(imageDir, 'facebookStrip.PNG')
+        #path=os.path.join(imageDir, 'facebookStrip.PNG')
+        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        path=os.path.join(self.outgoingPath,dateString+'_facebook.PNG')
         strip.save(path, 'PNG')
         print("\n")
         return path
@@ -91,6 +99,8 @@ class ImageProcessor(object):
 def main():
     import os
     print("started")
+    message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
     ip=ImageProcessor()
     facebookPath=ip.composeForFacebook(os.getcwd()+"/pics")
     twitterPath=ip.composeForTwitter(os.getcwd()+"/pics")
@@ -98,10 +108,10 @@ def main():
     with open('apiconfigs.txt', 'rb') as fp:
         import json
         config = json.load(fp)
-        twitter=Twitter(config["twitter"])
-        twitter.uploadImage(twitterPath)
-        facebook=Facebook(config["facebook"])
-        facebook.uploadImage("lol", facebookPath)
+        #twitter=Twitter(config["twitter"])
+        #twitter.uploadImage(message,twitterPath)
+        #facebook=Facebook(config["facebook"])
+        #facebook.uploadImage(message, facebookPath)
         
     ip.composeForPrinter(os.getcwd())
     
