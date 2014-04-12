@@ -22,7 +22,7 @@ this .delete file is created by another process
 class UploadServer(object):
     '''
     classdocs
-'''
+    '''
 
 
     def __init__(self,config=None):
@@ -42,11 +42,6 @@ class UploadServer(object):
             
         self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
         
-        self.Event=threading.Event()
-        self.Event.set()
-        
-        #self.CloseEvent=threading.Event()
-        #self.CloseEvent.clear()
         self.scheduler=sched.scheduler(time.time,time.sleep)
         self.scheduler.enter(2,1,self.upload,())
         
@@ -54,18 +49,22 @@ class UploadServer(object):
         self.uploadThread.start()
         
     def upload(self):
-        self.Event.wait(1)
-        self.Event.clear()
-
         for targetFile in glob.glob(os.path.join(self.outgoingPath, '*.done')):
             #print targetFile
-            currentTime=datetime.datetime.now()
-            currentTimeString=currentTime.strftime('%Y-%m-%d_%H:%M:%S.%f')
+
             fileName=os.path.basename(targetFile)
             print fileName
             fileTime=datetime.datetime.strptime(fileName[:16], '%Y-%m-%d_%H-%M') 
             print fileTime
-            if (currentTime - fileTime).total_seconds() > 20:
+            
+            
+            currentTime=datetime.datetime.now()
+            currentTimeString=currentTime.strftime('%Y-%m-%d_%H:%M:%S.%f')
+            
+            delete=False
+            if os.path.isfile(targetFile[:len(targetFile)-5]+".delete"):
+                delete=True
+            elif (currentTime - fileTime).total_seconds() > 5:
             #if fileTime < datetime.datetime.now()-datetime.timedelta(seconds=20):
                 '''then upload'''
                 serviceName=fileName[17:len(fileName)-5]
@@ -78,14 +77,23 @@ class UploadServer(object):
                     self.facebook.uploadImage(self.facebookMessage+" "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
                     print "done"
                 '''deleting'''
-                print "deleting"
-                os.remove(targetFile[:len(targetFile)-5]+".PNG")
-                os.remove(targetFile)
-                print "done"
+                delete=True
+                #os.remove(targetFile[:len(targetFile)-5]+".PNG")
+                #os.remove(targetFile)
             else:
                 pass
-        self.Event.set()
-        self.scheduler.enter(20, 1, self.upload,())
+            if delete:
+                print "deleting"
+                for targetFile in glob.glob(os.path.join(self.outgoingPath, fileName[:len(fileName)-5]+'.*')):
+                    os.remove(targetFile)
+                    print"- "+str(targetFile)
+                    #os.remove(targetFile[:len(targetFile)-5]+".PNG")
+                #os.remove(targetFile)
+                print "done"
+
+            self.scheduler.enter(5, 1, self.upload,())
+
+                
     
     def stopAll(self):
         map(self.scheduler.cancel,self.scheduler.queue)

@@ -9,6 +9,7 @@ import os,glob
 from Twitter import Twitter
 from Facebook import Facebook
 import datetime
+#import zlib
 
 class ImageProcessor(object):
     '''
@@ -56,13 +57,13 @@ class ImageProcessor(object):
         overlay=self.twitterLayout["overlay"]
         strip.paste(overlay,None,overlay)
         #path=os.path.join(imagedir, 'twitterStrip.PNG')
-        path=self.saveImageToOutgoing(strip,"twitter")
+        #path=self.saveImageToOutgoing(strip,"twitter")
 
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         #path=os.path.join(self.outgoingPath,dateString+'_twitter.PNG')
         #strip.save(path, 'PNG')
         print("\n")
-        return path
+        return [strip,"twitter"]
     
     def composeForFacebook(self,imageDir):
         print("composing for facebook")
@@ -86,21 +87,28 @@ class ImageProcessor(object):
         overlay=self.facebookLayout["overlay"]
         strip.paste(overlay,None,overlay)
         #path=os.path.join(imageDir, 'facebookStrip.PNG')
-        path=self.saveImageToOutgoing(strip,"facebook")
+        #path=self.saveImageToOutgoing(strip,"facebook")
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         #path=os.path.join(self.outgoingPath,dateString+'_facebook.PNG')
         #strip.save(path, 'PNG')
         print("\n")
-        return path
+        return [strip,"facebook"]
+        #return path
     
-    def saveImageToOutgoing(self,image,serviceName):
-        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-        path=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.PNG')
-        pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
-        image.save(path, 'PNG')
-        with open(pathDone, 'w') as doneFile:
-            doneFile.write('done')
-        return path
+    def saveImageToOutgoing(self,dateString,imageServicenameArray):
+        #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        for pairs in imageServicenameArray:
+            image=pairs[0]
+            serviceName=pairs[1]
+            path=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.PNG')
+            pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
+            image.save(path, 'PNG')
+            with open(pathDone, 'w') as doneFile:
+                doneFile.write('done')
+        '''making a token for later deletion of image before upload'''
+        tokenString=dateString.encode('base64')
+        print "token is dateString:"+dateString+"\nencoded to:"+tokenString
+        return tokenString
 
     def composeForPrinter(self,imageDir):
         print("composing For Printer")
@@ -113,9 +121,16 @@ def main():
     message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
     ip=ImageProcessor()
-    facebookPath=ip.composeForFacebook(os.getcwd()+"/pics")
-    twitterPath=ip.composeForTwitter(os.getcwd()+"/pics")
-
+    facebookImageAndString=ip.composeForFacebook(os.getcwd()+"/pics")
+    twitterImageAndString=ip.composeForTwitter(os.getcwd()+"/pics")
+    
+    dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+    token=ip.saveImageToOutgoing(
+                           dateString,
+                           [
+                            facebookImageAndString,
+                            twitterImageAndString
+                            ])
     with open('apiconfigs.txt', 'rb') as fp:
         import json
         config = json.load(fp)
