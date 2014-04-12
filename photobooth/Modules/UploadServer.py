@@ -64,7 +64,7 @@ class UploadServer(object):
             delete=False
             if os.path.isfile(targetFile[:len(targetFile)-5]+".delete"):
                 delete=True
-            elif (currentTime - fileTime).total_seconds() > 5:
+            elif (currentTime - fileTime).total_seconds() > 100:
             #if fileTime < datetime.datetime.now()-datetime.timedelta(seconds=20):
                 '''then upload'''
                 serviceName=fileName[17:len(fileName)-5]
@@ -91,7 +91,7 @@ class UploadServer(object):
                 #os.remove(targetFile)
                 print "done"
 
-            self.scheduler.enter(5, 1, self.upload,())
+        self.scheduler.enter(5, 1, self.upload,())
 
                 
     

@@ -9,6 +9,9 @@ import os,glob
 from Twitter import Twitter
 from Facebook import Facebook
 import datetime
+import socket
+from qrcode import *
+
 #import zlib
 
 class ImageProcessor(object):
@@ -21,6 +24,14 @@ class ImageProcessor(object):
         '''
         Constructor
         '''
+        '''getting ip'''
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("gmail.com",80))
+        self.ip=s.getsockname()[0]
+        print("ip is:"+str(self.ip))
+        s.close()
+        '''got ip'''
+        
         self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
 
         self.twitterLayout={
@@ -97,16 +108,32 @@ class ImageProcessor(object):
     
     def saveImageToOutgoing(self,dateString,imageServicenameArray):
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        '''making a token for later deletion of image before upload'''
+
+        tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
+        qr = QRCode(version=10, error_correction=ERROR_CORRECT_L)
+        qr.add_data(tokenString)
+        qr.make() # Generate the QRCode itself
+
+        # im contains a PIL.Image.Image object
+        im = qr.make_image()
+
         for pairs in imageServicenameArray:
             image=pairs[0]
             serviceName=pairs[1]
-            path=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.PNG')
-            pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
-            image.save(path, 'PNG')
+            path=os.path.join(self.outgoingPath,dateString+'_'+serviceName)
+            pathPNG=path+".PNG"
+            pathDone=path+".done"
+            pathQr=path+".qr.png"
+            #pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
+            image.save(pathPNG, 'PNG')
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
-        '''making a token for later deletion of image before upload'''
-        tokenString=dateString.encode('base64')
+            # To save it
+            im.save(pathQr)
+
+
+        
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
 
@@ -125,6 +152,7 @@ def main():
     twitterImageAndString=ip.composeForTwitter(os.getcwd()+"/pics")
     
     dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+    
     token=ip.saveImageToOutgoing(
                            dateString,
                            [
