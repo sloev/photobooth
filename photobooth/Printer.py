@@ -50,7 +50,7 @@ class ThermalPrinter(object):
     SERIALPORT = '/dev/ttyAMA0'
 
     BAUDRATE = 19200
-    TIMEOUT = 3
+    TIMEOUT = 100
 
     # pixels with more color value (average for multiple channels) are counted as white
     # tweak this if your images appear too black or too white
@@ -80,7 +80,7 @@ class ThermalPrinter(object):
     # clear, but the slower printing speed.
 
 
-    def __init__(self, heatTime=80, heatInterval=4, heatingDots=7, serialport=SERIALPORT):
+    def __init__(self, heatTime=120, heatInterval=50, heatingDots=20, serialport=SERIALPORT):
         
         self.printer = serial.Serial(serialport, self.BAUDRATE, timeout=self.TIMEOUT)
         self.printer.write(self._ESC) # ESC - command
