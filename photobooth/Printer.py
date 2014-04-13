@@ -318,7 +318,7 @@ class ThermalPrinter(object):
                     except IndexError:
                         pass
         print "finnished dithering"
-        return image
+        return img
         #image=img.copy()
     def print_bitmap(self, image):
         """ Best to use images that have a pixel width of 384 as this corresponds
