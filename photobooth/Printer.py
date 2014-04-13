@@ -308,13 +308,13 @@ class ThermalPrinter(object):
         if image.mode != '1':
             image = image.convert('1')
 
+    
+        bbox=image.getbbox()
+        if bbox[2] > 384:
+            image=image.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
+            image=image.resize((384,384))
         width  = image.size[0]
         height = image.size[1]
-        bbox=i.getbbox()
-        if width > 384:
-            i=i.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
-            i=i.resize((384,384))
-            width = 384
         rowBytes = (width + 7) / 8
         bitmap   = bytearray(rowBytes * height)
         pixels   = image.load()
