@@ -404,6 +404,9 @@ il inverse left
     # runtime dependency on Python Imaging Library
     import Image, ImageDraw
     i = Image.open("test.jpg")
+    bbox=i.getbbox()
+    i=i.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
+    i=i.resize((381,381))
     data = list(i.getdata())
     w, h = i.size
     p.print_bitmap(data, w, h, True)
