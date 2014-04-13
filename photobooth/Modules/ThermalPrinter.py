@@ -109,7 +109,7 @@ class Adafruit_Thermal(Serial):
           55,       # 7 (print settings)
           20,       # Heat dots (20 = balance darkness w/no jams)
           heatTime, # Lib default = 45
-          350)      # Heat interval (500 uS = slower but darker)
+          200)      # Heat interval (500 uS = slower but darker)
 
         # Description of print density from page 23 of the manual:
         # DC2 # n Set printing density
