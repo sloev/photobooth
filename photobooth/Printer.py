@@ -380,7 +380,12 @@ class ThermalPrinter(object):
         # output the array all at once to the printer
         # might be better to send while printing when dealing with 
         # very large arrays...
+        s=""
         for b in print_bytes:
+            s=s+str(chr(b))
+            if b==10:
+                print s
+                s=""
             self.printer.write(chr(b))   
             #time.sleep(0.001)    
 
@@ -404,7 +409,7 @@ if __name__ == '__main__':
     #data = list(i.getdata())
     #w, h = i.size
     image=p.resize(image)
-    image=p.raster(image)
+    #image=p.raster(image)
     for i in range(4):
         p.print_bitmap(image)
         p.linefeed()
