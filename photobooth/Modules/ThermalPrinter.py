@@ -129,7 +129,7 @@ class Adafruit_Thermal(Serial):
           (printBreakTime << 5) | printDensity)
 
         self.dotPrintTime = 0.3
-        self.dotFeedTime  = 0.021
+        self.dotFeedTime  = 0.0021
 
 
     # Because there's no flow control between the printer and computer,
