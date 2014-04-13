@@ -18,7 +18,8 @@ bbox=image.getbbox()
 img=image.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
 image=image.resize((dim-10,dim-10))
 printer.printImage(image, True)
+printer.feed(1)
 
-printer.sleep()      # Tell printer to sleep
-printer.wake()       # Call wake() before printing again, even if reset
-printer.setDefault() # Restore printer to defaults
+#printer.sleep()      # Tell printer to sleep
+#printer.wake()       # Call wake() before printing again, even if reset
+#printer.setDefault() # Restore printer to defaults
