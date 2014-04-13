@@ -6,7 +6,7 @@ Created on Apr 13, 2014
 #!/usr/bin/env python 
 #coding=utf-8
 
-import serial, time
+import serial, time,Image
 
 #===========================================================#
 # RASPBERRY PI (tested with Raspbian Jan 2012):
@@ -296,8 +296,46 @@ class ThermalPrinter(object):
 
         return black_and_white_pixels
 
+# Print Image.  Requires Python Imaging Library.  This is
+    # specific to the Python port and not present in the Arduino
+    # library.  Image will be cropped to 384 pixels width if
+    # necessary, and converted to 1-bit w/diffusion dithering.
+    # For any other behavior (scale, B&W threshold, etc.), use
+    # the Imaging Library to perform such operations before
+    # passing the result to this function.
+    def printImage(self, image):
 
-    def print_bitmap(self, pixels, w, h, output_png=False):
+        if image.mode != '1':
+            image = image.convert('1')
+
+        width  = image.size[0]
+        height = image.size[1]
+        bbox=i.getbbox()
+        if width > 384:
+            i=i.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
+            i=i.resize((384,384))
+            width = 384
+        rowBytes = (width + 7) / 8
+        bitmap   = bytearray(rowBytes * height)
+        pixels   = image.load()
+
+        for y in range(height):
+            n = y * rowBytes
+            x = 0
+            for b in range(rowBytes):
+                sum = 0
+                bit = 128
+                while bit > 0:
+                    if x >= width: break
+                    if pixels[x, y] == 0:
+                        sum |= bit
+                    x    += 1
+                    bit >>= 1
+                bitmap[n + b] = sum
+
+        self.printBitmap(bitmap,width, height)
+        
+    def print_bitmap(self, pixels, w, h):
         """ Best to use images that have a pixel width of 384 as this corresponds
             to the printer row width. 
             
@@ -316,10 +354,6 @@ class ThermalPrinter(object):
                 p.print_bitmap(data, w, h)
         """
         counter = 0
-        if output_png:
-            import Image, ImageDraw
-            test_img = Image.new('RGB', (384, h))
-            draw = ImageDraw.Draw(test_img)
 
         self.linefeed()
         
@@ -340,26 +374,14 @@ class ThermalPrinter(object):
                     # check if this is black
                     if pixel_value == 0:
                         byt += 1 << (7 - xx)
-                        if output_png: draw.point((counter % 384, round(counter / 384)), fill=(0, 0, 0))
-                    # it's white
-                    else:
-                        if output_png: draw.point((counter % 384, round(counter / 384)), fill=(255, 255, 255))
-                
+                    # it's white                
                 print_bytes.append(byt)
         
         # output the array all at once to the printer
         # might be better to send while printing when dealing with 
         # very large arrays...
         for b in print_bytes:
-            self.printer.write(chr(b))   
-        
-        if output_png:
-            test_print = open('print-output.png', 'wb')
-            test_img.save(test_print, 'PNG')
-            print "output saved to %s" % test_print.name
-            test_print.close()           
-
-
+            self.printer.write(chr(b))          
 
 if __name__ == '__main__':
     import sys, os
@@ -402,14 +424,11 @@ il inverse left
     p.print_markup(markup)
 
     # runtime dependency on Python Imaging Library
-    import Image, ImageDraw
     i = Image.open("test.jpg")
-    bbox=i.getbbox()
-    i=i.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
-    i=i.resize((381,381))
-    data = list(i.getdata())
-    w, h = i.size
-    p.print_bitmap(data, w, h, True)
+    p.printImage(i)
+    #data = list(i.getdata())
+    #w, h = i.size
+    #p.print_bitmap(data, w, h, False)
     p.linefeed()
     p.justify("C")
     p.barcode_chr("2")
