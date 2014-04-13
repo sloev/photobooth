@@ -311,7 +311,7 @@ class ThermalPrinter(object):
                 p.print_bitmap(data, w, h)
         """
         #bbox=image.getbbox()
-        image=ImageOps.grayscale(image)
+        #image=ImageOps.grayscale(image)
 
         width, height = image.size
 
@@ -323,7 +323,7 @@ class ThermalPrinter(object):
         pixels = list(image.getdata())
         length=len(pixels)
         noise=numpy.random.normal(0,10,length)
-        pixels=pixels+noise
+        pixels=pixels+[noise,noise,noise]
         
         #original :
         counter = 0
