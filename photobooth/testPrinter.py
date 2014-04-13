@@ -17,8 +17,10 @@ dim=383
 bbox=image.getbbox()
 img=image.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
 image=image.resize((dim-10,dim-10))
-printer.printImage(image, True)
+printer.printImage(image, False)
 printer.feed(1)
+printer.println("Adafruit!")
+
 
 #printer.sleep()      # Tell printer to sleep
 #printer.wake()       # Call wake() before printing again, even if reset
