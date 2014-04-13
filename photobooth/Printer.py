@@ -332,8 +332,9 @@ class ThermalPrinter(object):
                     x    += 1
                     bit >>= 1
                 bitmap[n + b] = sum
-
-        self.print_bitmap(bitmap,width, height)
+        for b in bitmap:
+            self.printer.write(chr(b)) 
+        #self.print_bitmap(bitmap,width, height)
         
     def print_bitmap(self, pixels, w, h):
         """ Best to use images that have a pixel width of 384 as this corresponds
