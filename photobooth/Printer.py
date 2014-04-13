@@ -376,7 +376,8 @@ class ThermalPrinter(object):
         # might be better to send while printing when dealing with 
         # very large arrays...
         for b in print_bytes:
-            self.printer.write(chr(b))       
+            self.printer.write(chr(b))   
+            time.sleep(0.01)    
 
 if __name__ == '__main__':
     import sys, os
