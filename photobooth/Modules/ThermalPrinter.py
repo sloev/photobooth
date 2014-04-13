@@ -128,7 +128,7 @@ class Adafruit_Thermal(Serial):
           35, # Print density
           (printBreakTime << 5) | printDensity)
 
-        self.dotPrintTime = 0.03
+        self.dotPrintTime = 0.09
         self.dotFeedTime  = 0.021
 
 
