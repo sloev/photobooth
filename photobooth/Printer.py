@@ -292,13 +292,17 @@ class ThermalPrinter(object):
             return False
 
         return black_and_white_pixels
-
-    def raster(self,image):
+    def resize(self,image):
         width,height=image.size
+
         if width > 384:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
             image=image.resize((384,384))
-            width, height = image.size
+        return image
+    
+    def raster(self,image):
+        width,height=image.size
+
         img = image.convert('L')
 
         threshold = 255*[0] + 255*[255]
@@ -398,7 +402,7 @@ if __name__ == '__main__':
     image = Image.open("test.jpg")
     #data = list(i.getdata())
     #w, h = i.size
-    #image=p.raster(image)
+    image=p.resize(image)
     for i in range(4):
         p.print_bitmap(image)
         p.linefeed()
