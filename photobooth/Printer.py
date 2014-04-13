@@ -80,7 +80,8 @@ class ThermalPrinter(object):
     # clear, but the slower printing speed.
 
 
-    def __init__(self, heatTime=80, heatInterval=2, heatingDots=7, serialport=SERIALPORT):
+    def __init__(self, heatTime=80, heatInterval=4, heatingDots=7, serialport=SERIALPORT):
+        
         self.printer = serial.Serial(serialport, self.BAUDRATE, timeout=self.TIMEOUT)
         self.printer.write(self._ESC) # ESC - command
         self.printer.write(chr(64)) # @   - initialize
