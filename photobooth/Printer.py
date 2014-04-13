@@ -338,7 +338,7 @@ class ThermalPrinter(object):
                         img.putpixel(nxy, img.getpixel(nxy) + err)
                     except IndexError:
                         pass
-        
+        print "finnished dithering"
         image=img.copy()
 
 
@@ -348,8 +348,9 @@ class ThermalPrinter(object):
         counter = 0
 
         self.linefeed()
-        
+        print "starting to binarize"
         black_and_white_pixels = self.convert_pixel_array_to_binary(pixels, width, height)        
+        print "finnished binarizing"
         print_bytes = []
 
         # read the bytes into an array
