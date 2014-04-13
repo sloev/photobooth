@@ -13,6 +13,10 @@ printer = Adafruit_Thermal("/dev/ttyAMA0", 19200, timeout=20)
 # Print the 135x135 pixel QR code in adaqrcode.py
 printer.feed(1)
 image=Image.open("morten.jpg")
+dim=383
+bbox=image.getbbox()
+img=image.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
+image=image.resize((dim-10,dim-10))
 printer.printImage(image, True)
 
 printer.sleep()      # Tell printer to sleep
