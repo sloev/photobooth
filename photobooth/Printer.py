@@ -323,7 +323,7 @@ class ThermalPrinter(object):
         pixels = list(image.getdata())
         length=len(pixels)
         noise=numpy.random.normal(0,10,(length,3))
-        pixels=pixels+[noise,noise,noise]
+        pixels=pixels+noise
         
         #original :
         counter = 0
