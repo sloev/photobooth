@@ -311,7 +311,7 @@ class ThermalPrinter(object):
                 p.print_bitmap(data, w, h)
         """
         #bbox=image.getbbox()
-        imgage=ImageOps.grayscale(imgage)
+        image=ImageOps.grayscale(image)
 
         width, height = image.size
 
