@@ -322,7 +322,7 @@ class ThermalPrinter(object):
             width, height = image.size
         img = image.convert('L')
 
-        threshold = 128*[0] + 128*[255]
+        threshold = 255*[0] + 255*[255]
 
         for y in range(img.size[1]):
             for x in range(img.size[0]):
