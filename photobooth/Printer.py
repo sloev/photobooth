@@ -18,7 +18,7 @@ import serial, time
 # - Ensure that the SERIALPORT setting is correct below
 #
 # BEAGLE BONE: 
-# Mux settings (€ngstršm 2012.05, also work on ubuntu 12.04):
+# Mux settings ( 2012.05, also work on ubuntu 12.04):
 # echo 1 > /sys/kernel/debug/omap_mux/spi0_sclk
 # echo 1 > /sys/kernel/debug/omap_mux/spi0_d0 
 #===========================================================#
