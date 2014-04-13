@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from Modules.ThermalPrinter import Adafruit_Thermal
+import Image
 
 printer = Adafruit_Thermal("/dev/ttyAMA0", 19200, timeout=5)
 
