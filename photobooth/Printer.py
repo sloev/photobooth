@@ -293,29 +293,8 @@ class ThermalPrinter(object):
 
         return black_and_white_pixels
 
-
-    def print_bitmap(self, image):
-        """ Best to use images that have a pixel width of 384 as this corresponds
-            to the printer row width. 
-            
-            pixels = a pixel array. RGBA, RGB, or one channel plain list of values (ranging from 0-255).
-            w = width of image
-            h = height of image
-            if "output_png" is set, prints an "print_bitmap_output.png" in the same folder using the same
-            thresholds as the actual printing commands. Useful for seeing if there are problems with the 
-            original image (this requires PIL).
-
-            Example code with PIL:
-                import Image, ImageDraw
-                i = Image.open("lammas_grayscale-bw.png")
-                data = list(i.getdata())
-                w, h = i.size
-                p.print_bitmap(data, w, h)
-        """
-        #bbox=image.getbbox()
-        #image=ImageOps.grayscale(image)
-        width, height = image.size
-
+    def raster(self,image):
+        width,height=image.size
         if width > 384:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
             image=image.resize((384,384))
@@ -339,7 +318,30 @@ class ThermalPrinter(object):
                     except IndexError:
                         pass
         print "finnished dithering"
-        image=img.copy()
+        return image
+        #image=img.copy()
+    def print_bitmap(self, image):
+        """ Best to use images that have a pixel width of 384 as this corresponds
+            to the printer row width. 
+            
+            pixels = a pixel array. RGBA, RGB, or one channel plain list of values (ranging from 0-255).
+            w = width of image
+            h = height of image
+            if "output_png" is set, prints an "print_bitmap_output.png" in the same folder using the same
+            thresholds as the actual printing commands. Useful for seeing if there are problems with the 
+            original image (this requires PIL).
+
+            Example code with PIL:
+                import Image, ImageDraw
+                i = Image.open("lammas_grayscale-bw.png")
+                data = list(i.getdata())
+                w, h = i.size
+                p.print_bitmap(data, w, h)
+        """
+        #bbox=image.getbbox()
+        #image=ImageOps.grayscale(image)
+        width, height = image.size
+
 
 
         pixels = list(image.getdata())
@@ -395,9 +397,10 @@ if __name__ == '__main__':
     image = Image.open("test.jpg")
     #data = list(i.getdata())
     #w, h = i.size
-    p.print_bitmap(image)
-
-    p.linefeed()
+    image=p.raster(image)
+    for i in range(4):
+        p.print_bitmap(image)
+        p.linefeed()
     p.linefeed()
     p.linefeed()
     
