@@ -296,9 +296,9 @@ class ThermalPrinter(object):
     def resize(self,image):
         width,height=image.size
 
-        if width > 384:
+        if width > 200:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((384,384))
+            image=image.resize((200,200))
         return image
     
     def raster(self,image):
@@ -362,7 +362,7 @@ class ThermalPrinter(object):
 
         # read the bytes into an array
         for rowStart in xrange(0, height, 256):
-            chunkHeight = 1# 255 if (height - rowStart) > 255 else height - rowStart
+            chunkHeight =  255 if (height - rowStart) > 255 else height - rowStart
             print_bytes += (18, 42, chunkHeight, 48)
             
             for i in xrange(0, 48 * chunkHeight, 1):
