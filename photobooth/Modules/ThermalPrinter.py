@@ -47,8 +47,8 @@ class Adafruit_Thermal(Serial):
 
     resumeTime      =  0.0
     byteTime        =  0.0
-    dotPrintTime    =  0.033
-    dotFeedTime     =  0.0025
+    dotPrintTime    =  0.33
+    dotFeedTime     =  0.025
     prevByte        = '\n'
     column          =  0
     maxColumn       = 32
@@ -84,7 +84,7 @@ class Adafruit_Thermal(Serial):
         # power up -- it needs a moment to cold boot and initialize.
         # Allow at least 1/2 sec of uptime before printer can
         # receive data.
-        self.timeoutSet(0.5)
+        self.timeoutSet(1)
 
         self.wake()
         self.reset()
@@ -109,7 +109,7 @@ class Adafruit_Thermal(Serial):
           55,       # 7 (print settings)
           20,       # Heat dots (20 = balance darkness w/no jams)
           heatTime, # Lib default = 45
-          250)      # Heat interval (500 uS = slower but darker)
+          350)      # Heat interval (500 uS = slower but darker)
 
         # Description of print density from page 23 of the manual:
         # DC2 # n Set printing density
@@ -128,8 +128,8 @@ class Adafruit_Thermal(Serial):
           35, # Print density
           (printBreakTime << 5) | printDensity)
 
-        self.dotPrintTime = 0.04
-        self.dotFeedTime  = 0.021
+        self.dotPrintTime = 0.033
+        self.dotFeedTime  = 0.0021
 
 
     # Because there's no flow control between the printer and computer,
