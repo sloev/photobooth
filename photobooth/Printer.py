@@ -50,7 +50,7 @@ class ThermalPrinter(object):
     SERIALPORT = '/dev/ttyAMA0'
 
     BAUDRATE = 19200
-    TIMEOUT = 100
+    TIMEOUT = 3
 
     # pixels with more color value (average for multiple channels) are counted as white
     # tweak this if your images appear too black or too white
@@ -80,7 +80,7 @@ class ThermalPrinter(object):
     # clear, but the slower printing speed.
 
 
-    def __init__(self, heatTime=120, heatInterval=50, heatingDots=20, serialport=SERIALPORT):
+    def __init__(self, heatTime=80, heatInterval=4, heatingDots=7, serialport=SERIALPORT):
         
         self.printer = serial.Serial(serialport, self.BAUDRATE, timeout=self.TIMEOUT)
         self.printer.write(self._ESC) # ESC - command
@@ -296,9 +296,9 @@ class ThermalPrinter(object):
     def resize(self,image):
         width,height=image.size
 
-        if width > 383:
+        if width > 384:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((383,383))
+            image=image.resize((384,384))
         return image
     
     def raster(self,image):
@@ -362,7 +362,7 @@ class ThermalPrinter(object):
 
         # read the bytes into an array
         for rowStart in xrange(0, height, 256):
-            chunkHeight = 255 if (height - rowStart) > 255 else height - rowStart
+            chunkHeight = 1# 255 if (height - rowStart) > 255 else height - rowStart
             print_bytes += (18, 42, chunkHeight, 48)
             
             for i in xrange(0, 48 * chunkHeight, 1):
@@ -380,9 +380,8 @@ class ThermalPrinter(object):
         # output the array all at once to the printer
         # might be better to send while printing when dealing with 
         # very large arrays...
-        s=""
+        
         for b in print_bytes:
-             
             self.printer.write(chr(b))   
             #time.sleep(0.001)    
 
