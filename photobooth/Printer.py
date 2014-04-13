@@ -323,7 +323,7 @@ class ThermalPrinter(object):
         img = image.convert('L')
 
         threshold = 255*[0] + 255*[255]
-
+        print "starting to dither"
         for y in range(img.size[1]):
             for x in range(img.size[0]):
         
