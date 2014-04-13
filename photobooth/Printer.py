@@ -18,7 +18,8 @@ import serial, time,Image,numpy,math,ImageOps
 # echo 1 > /sys/kernel/debug/omap_mux/spi0_d0 
 #===========================================================#
 
-    
+   
+
 class ThermalPrinter(object):
     """ 
         
@@ -77,7 +78,8 @@ class ThermalPrinter(object):
     # but the slower printing speed. If heating time is too short,
     # blank page may occur. The more heating interval, the more
     # clear, but the slower printing speed.
-    
+
+
     def __init__(self, heatTime=80, heatInterval=2, heatingDots=7, serialport=SERIALPORT):
         self.printer = serial.Serial(serialport, self.BAUDRATE, timeout=self.TIMEOUT)
         self.printer.write(self._ESC) # ESC - command
@@ -313,6 +315,26 @@ class ThermalPrinter(object):
         #bbox=image.getbbox()
         #image=ImageOps.grayscale(image)
 
+        img = image.convert('L')
+
+        threshold = 128*[0] + 128*[255]
+
+        for y in range(img.size[1]):
+            for x in range(img.size[0]):
+        
+                old = img.getpixel((x, y))
+                new = threshold[old]
+                err = (old - new) >> 3 # divide by 8
+                    
+                img.putpixel((x, y), new)
+                
+                for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
+                    try:
+                        img.putpixel(nxy, img.getpixel(nxy) + err)
+                    except IndexError:
+                        pass
+        
+        image=img.copy()
         width, height = image.size
 
         if width > 384:
@@ -321,10 +343,6 @@ class ThermalPrinter(object):
             width, height = image.size
 
         pixels = list(image.getdata())
-        length=len(pixels)
-        noise=numpy.random.normal(0,55,(length,3))
-        pixels=pixels+noise
-        pixels=pixels.tolist()
         
         #original :
         counter = 0

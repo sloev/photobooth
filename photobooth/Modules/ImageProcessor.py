@@ -12,8 +12,7 @@ import datetime
 import socket
 from qrcode import *
 
-#import zlib
-
+             
 class ImageProcessor(object):
     '''
     classdocs
