@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 #coding=utf-8
 
-import serial, time,Image,numpy,math
+import serial, time,Image,numpy,math,ImageOps
 
 #===========================================================#
 # RASPBERRY PI (tested with Raspbian Jan 2012):
@@ -311,11 +311,15 @@ class ThermalPrinter(object):
                 p.print_bitmap(data, w, h)
         """
         #bbox=image.getbbox()
+        imgage=ImageOps.grayscale(imgage)
+
         width, height = image.size
 
         if width > 384:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
             image=image.resize((384,384))
+            width, height = image.size
+
         pixels = list(image.getdata())
         length=len(pixels)
         noise=numpy.random.normal(0,10,length)
