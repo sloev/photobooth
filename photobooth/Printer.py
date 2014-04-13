@@ -314,7 +314,12 @@ class ThermalPrinter(object):
         """
         #bbox=image.getbbox()
         #image=ImageOps.grayscale(image)
+        width, height = image.size
 
+        if width > 384:
+            image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+            image=image.resize((384,384))
+            width, height = image.size
         img = image.convert('L')
 
         threshold = 128*[0] + 128*[255]
@@ -335,12 +340,7 @@ class ThermalPrinter(object):
                         pass
         
         image=img.copy()
-        width, height = image.size
 
-        if width > 384:
-            image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((384,384))
-            width, height = image.size
 
         pixels = list(image.getdata())
         
