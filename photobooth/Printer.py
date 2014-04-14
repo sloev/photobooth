@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 #coding=utf-8
 
-import serial, time,Image,numpy,math,ImageOps
+import serial, time
 
 #===========================================================#
 # RASPBERRY PI (tested with Raspbian Jan 2012):
@@ -13,13 +13,12 @@ import serial, time,Image,numpy,math,ImageOps
 # - Ensure that the SERIALPORT setting is correct below
 #
 # BEAGLE BONE: 
-# Mux settings (�ngstr�m 2012.05, also work on ubuntu 12.04):
+# Mux settings (Ängström 2012.05, also work on ubuntu 12.04):
 # echo 1 > /sys/kernel/debug/omap_mux/spi0_sclk
 # echo 1 > /sys/kernel/debug/omap_mux/spi0_d0 
 #===========================================================#
 
-   
-
+    
 class ThermalPrinter(object):
     """ 
         
@@ -78,10 +77,8 @@ class ThermalPrinter(object):
     # but the slower printing speed. If heating time is too short,
     # blank page may occur. The more heating interval, the more
     # clear, but the slower printing speed.
-
-
-    def __init__(self, heatTime=80, heatInterval=4, heatingDots=7, serialport=SERIALPORT):
-        
+    
+    def __init__(self, heatTime=80, heatInterval=2, heatingDots=7, serialport=SERIALPORT):
         self.printer = serial.Serial(serialport, self.BAUDRATE, timeout=self.TIMEOUT)
         self.printer.write(self._ESC) # ESC - command
         self.printer.write(chr(64)) # @   - initialize
@@ -293,39 +290,9 @@ class ThermalPrinter(object):
             return False
 
         return black_and_white_pixels
-    def resize(self,image):
-        width,height=image.size
 
-        if width > 380:
-            image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((255,380))
-        return image
-    
-    def raster(self,image):
-        width,height=image.size
 
-        img = image.convert('L')
-
-        threshold = 255*[0] + 255*[255]
-        print "starting to dither"
-        for y in range(img.size[1]):
-            for x in range(img.size[0]):
-        
-                old = img.getpixel((x, y))
-                new = threshold[old]
-                err = (old - new) >> 3 # divide by 8
-                    
-                img.putpixel((x, y), new)
-                
-                for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
-                    try:
-                        img.putpixel(nxy, img.getpixel(nxy) + err)
-                    except IndexError:
-                        pass
-        print "finnished dithering"
-        return img.copy()
-        #image=img.copy()
-    def print_bitmap(self, image):
+    def print_bitmap(self, pixels, w, h, output_png=False):
         """ Best to use images that have a pixel width of 384 as this corresponds
             to the printer row width. 
             
@@ -343,26 +310,21 @@ class ThermalPrinter(object):
                 w, h = i.size
                 p.print_bitmap(data, w, h)
         """
-        #bbox=image.getbbox()
-        #image=ImageOps.grayscale(image)
-        width, height = image.size
-
-
-
-        pixels = list(image.getdata())
-        
-        #original :
         counter = 0
+        if output_png:
+            import Image, ImageDraw
+            test_img = Image.new('RGB', (384, h))
+            draw = ImageDraw.Draw(test_img)
 
         self.linefeed()
-        print "starting to binarize"
-        black_and_white_pixels = self.convert_pixel_array_to_binary(pixels, width, height)        
-        print "finnished binarizing"
+        print "binary start"
+        black_and_white_pixels = self.convert_pixel_array_to_binary(pixels, w, h)        
         print_bytes = []
-
+        print "binary end"
+        
         # read the bytes into an array
-        for rowStart in xrange(0, height, 256):
-            chunkHeight =  255 if (height - rowStart) > 255 else height - rowStart
+        for rowStart in xrange(0, h, 256):
+            chunkHeight = 255 if (h - rowStart) > 255 else h - rowStart
             print_bytes += (18, 42, chunkHeight, 48)
             
             for i in xrange(0, 48 * chunkHeight, 1):
@@ -374,16 +336,27 @@ class ThermalPrinter(object):
                     # check if this is black
                     if pixel_value == 0:
                         byt += 1 << (7 - xx)
-                                 
+                        if output_png: draw.point((counter % 384, round(counter / 384)), fill=(0, 0, 0))
+                    # it's white
+                    else:
+                        if output_png: draw.point((counter % 384, round(counter / 384)), fill=(255, 255, 255))
+                
                 print_bytes.append(byt)
         
         # output the array all at once to the printer
         # might be better to send while printing when dealing with 
         # very large arrays...
-        
+        print "starting transmit"
         for b in print_bytes:
             self.printer.write(chr(b))   
-            #time.sleep(0.001)    
+        
+        if output_png:
+            test_print = open('print-output.png', 'wb')
+            test_img.save(test_print, 'PNG')
+            print "output saved to %s" % test_print.name
+            test_print.close()           
+
+
 
 if __name__ == '__main__':
     import sys, os
@@ -398,17 +371,11 @@ if __name__ == '__main__':
 
     print "Testing printer on port %s" % serialport
     p = ThermalPrinter(serialport=serialport)
-
-
-    # runtime dependency on Python Imaging Library
-    image = Image.open("test.jpg")
-    #data = list(i.getdata())
-    #w, h = i.size
-    image=p.resize(image)
-    #image=p.raster(image)
-    for i in range(5):
-        p.print_bitmap(image)
-        #p.linefeed()
-    p.linefeed()
-    p.linefeed()
+    import Image, ImageDraw
+    i = Image.open("example-lammas.png")
+    data = list(i.getdata())
+    w, h = i.size
+    for i in range(4):
+        p.print_bitmap(data, w, h, True)
+        p.linefeed()
     
