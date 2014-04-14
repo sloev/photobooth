@@ -405,7 +405,7 @@ if __name__ == '__main__':
     #data = list(i.getdata())
     #w, h = i.size
     image=p.resize(image)
-    image=p.raster(image)
+    #image=p.raster(image)
     for i in range(5):
         p.print_bitmap(image)
         #p.linefeed()
