@@ -296,9 +296,9 @@ class ThermalPrinter(object):
     def resize(self,image):
         width,height=image.size
 
-        if width > 200:
+        if width > 300:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((200,200))
+            image=image.resize((300,300))
         return image
     
     def raster(self,image):
@@ -405,10 +405,10 @@ if __name__ == '__main__':
     #data = list(i.getdata())
     #w, h = i.size
     image=p.resize(image)
-    #image=p.raster(image)
-    for i in range(4):
+    image=p.raster(image)
+    for i in range(5):
         p.print_bitmap(image)
-        p.linefeed()
+        #p.linefeed()
     p.linefeed()
     p.linefeed()
     
