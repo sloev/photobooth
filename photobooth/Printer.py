@@ -298,7 +298,7 @@ class ThermalPrinter(object):
 
         if width > 380:
             image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
-            image=image.resize((380,255))
+            image=image.resize((255,380))
         return image
     
     def raster(self,image):
