@@ -357,7 +357,39 @@ class ThermalPrinter(object):
             test_print.close()           
 
 
+    def resize(self,image):
+        import ImageOps
+        width,height=image.size
 
+        image=image.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+        image=image.resize((384,384))
+        image=ImageOps.grayscale(image)
+        return image
+    
+    def raster(self,image):
+        width,height=image.size
+
+        img = image.convert('L')
+
+        threshold = 255*[0] + 255*[255]
+        print "starting to dither"
+        for y in range(img.size[1]):
+            for x in range(img.size[0]):
+        
+                old = img.getpixel((x, y))
+                new = threshold[old]
+                err = (old - new) >> 3 # divide by 8
+                    
+                img.putpixel((x, y), new)
+                
+                for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
+                    try:
+                        img.putpixel(nxy, img.getpixel(nxy) + err)
+                    except IndexError:
+                        pass
+        print "finnished dithering"
+        return img.copy()
+    
 if __name__ == '__main__':
     import sys, os
 
@@ -372,7 +404,9 @@ if __name__ == '__main__':
     print "Testing printer on port %s" % serialport
     p = ThermalPrinter(serialport=serialport)
     import Image, ImageDraw
-    i = Image.open("example-lammas.png")
+    i = Image.open("test.jpg")
+    i=p.resize(i)
+    i=p.raster(i)
     data = list(i.getdata())
     w, h = i.size
     for i in range(4):
