@@ -91,9 +91,9 @@ class SimpleThermalPrinter(Serial):
         
         if rowBytesClipped >= 48:
             rowBytesClipped=48
-        
-        data=[0]*rowBytesClipped
         chunk=255
+
+        data=[0]*(rowBytesClipped*chunk)
         for t in range(48*255):
             
         #for i in range(width):
