@@ -125,7 +125,7 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*(384*255*)
+    data1=[1]*(384*255)
     data2=[1]*(384*255)
     flip=True
     for i in range(384*255):
