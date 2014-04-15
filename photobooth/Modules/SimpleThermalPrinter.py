@@ -87,16 +87,17 @@ class SimpleThermalPrinter(Serial):
             
         command=[18,42,1,rowBytesClipped]
         self.writeBytes(command)
-        time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
+        #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
         self.writeBytes(data)
-        time.sleep(self.BYTE_TIME*len(data))
+        #time.sleep(self.BYTE_TIME*len(data))
             
     def writeBytes(self, bytes):
         for byte in bytes:
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
             time.sleep(self.BYTE_TIME)
+        time.sleep(self.BYTE_TIME*4)
           
 def main():
     #
@@ -107,7 +108,7 @@ def main():
         data[i]=int(flip)
         flip=not flip
     for i in range(40):
-        printer.printPixelLine(data)
+        #printer.printPixelLine(data)
     printer.feed()
 if __name__ == '__main__':
     main()
