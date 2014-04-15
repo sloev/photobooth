@@ -63,7 +63,8 @@ class SimpleThermalPrinter(Serial):
         command=[27,74,lines]
         self.writeBytes(command)
 
-    def setControlParameters(self,heatingDots=60,  heatingTime=45, heatingInterval=250):
+#    def setControlParameters(self,heatingDots=60,  heatingTime=200, heatingInterval=250):
+    def setControlParameters(self,heatingDots=7,  heatingTime=80, heatingInterval=2):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
         self.writeBytes(command)
         command=[27, 51, 24]
