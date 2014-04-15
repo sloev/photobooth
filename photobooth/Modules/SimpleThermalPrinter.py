@@ -101,8 +101,8 @@ class SimpleThermalPrinter(Serial):
             index=int(i/8)
             byte=bit<<(7 - i % 8)
             data[index]+=byte
-        data+=data
-        command=[18,42,2,rowBytesClipped]
+        #data+=data
+        command=[18,42,0,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
