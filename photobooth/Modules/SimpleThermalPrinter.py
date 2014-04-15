@@ -80,36 +80,45 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(command)
         
     def printPixelLine(self,pixels):#takes a list of booleans
-        #width=len(pixels)
+        width=len(pixels)
         
-        #if width>384:
-            #width=384
+        if width>384:
+            width=384
         
-        #rowBytes=int((width+7)/8)
+        rowBytes=int((width+7)/8)
         
-        rowBytesClipped=48
+        rowBytesClipped=rowBytes
         
         if rowBytesClipped >= 48:
             rowBytesClipped=48
-        chunk=255
-
-        data=[0]*(rowBytesClipped*chunk)
-        for t in range(rowBytesClipped*chunk):
-            
-        #for i in range(width):
-            bit=1
-            if pixels[t]:
-                pass#bit=1
-            index=int(t/8)
-            byte=bit<<(7 - t % 8)
+        
+        data=[0]*rowBytesClipped
+        
+        for i in range(width):
+            bit=0
+            if pixels[i]:
+                bit=1
+            index=int(i/8)
+            byte=bit<<(7 - i % 8)
             data[index]+=byte
             
-        command=[18,42,chunk,rowBytesClipped]
+        command=[18,42,1,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
         self.writeBytes(data)
         #time.sleep(self.BYTE_TIME*len(data))
+    def writeSquare(self):
+        data=[]
+        height=255
+        width=48
+        for i in range(width*height):
+            data+=255
+        command=[18,42,height,width]
+        self.writeBytes(command)
+        #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
+            
+        self.writeBytes(data)
             
     def writeBytes(self, bytes):
         for byte in bytes:
@@ -125,10 +134,10 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*(384*255)
-    data2=[1]*(384*255)
+    data1=[1]*384
+    data2=[1]*384
     flip=True
-    for i in range(384*255):
+    for i in range(384):
         data1[i]=int(flip)
         flip=not flip
 
@@ -142,7 +151,7 @@ def main():
                 c=c[0:1]
                 if(c=='d'): 
                     for i in range(1):
-                        printer.printPixelLine(data2)
+                        printer.writeSquare()
                         printer.feed()
                     print "done - press s or d for lines"
                 if(c=='s'): 
