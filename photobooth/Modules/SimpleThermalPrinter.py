@@ -93,17 +93,17 @@ class SimpleThermalPrinter(Serial):
         if rowBytesClipped >= 48:
             rowBytesClipped=48
         
-        data=[0]*rowBytesClipped*255
-        for i in range(255):
-            for i in range(width):
+        data=[0]*(rowBytesClipped*254)
+        for i in range(254):
+            for j in range(width):
                 bit=0
                 if pixels[i]:
                     bit=1
-                index=int(i/8)
-                byte=bit<<(7 - i % 8)
+                index=int((i+j)/8)
+                byte=bit<<(7 - j % 8)
                 data[index]+=byte
                 
-        command=[18,42,255,rowBytesClipped]
+        command=[18,42,254,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
