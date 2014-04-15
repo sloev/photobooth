@@ -129,7 +129,7 @@ class SimpleThermalPrinter(Serial):
             time.sleep(self.BYTE_TIME)
             if counter>7:
                 counter=0
-                time.sleep(self.BYTE_TIME*2)
+                time.sleep(self.BYTE_TIME*4)
         #time.sleep(self.LINE_TIME)
         
     def close(self):
