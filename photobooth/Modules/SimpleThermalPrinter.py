@@ -102,6 +102,7 @@ class SimpleThermalPrinter(Serial):
             time.sleep(self.BYTE_TIME)
         time.sleep(self.LINE_TIME)
     def close(self):
+        self.setStatus(False)
         super(SimpleThermalPrinter, self).flushOutput()
           
 def main():
