@@ -117,7 +117,7 @@ def main():
     #
     printer=SimpleThermalPrinter()  
     data1=[1]*384
-    data2=data1
+    data2=[1]*384
     flip=True
     for i in range(384):
         data1[i]=int(0)
