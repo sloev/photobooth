@@ -29,7 +29,8 @@ class SimpleThermalPrinter(Serial):
         Constructor
         '''
         baudrate = 19200
-        self.BYTE_TIME =(11.0) / float(baudrate)
+        self.BYTE_TIME =(11.0*2) / float(baudrate)
+        self.LINE_TIME=0.05
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate,timeout=1000)
@@ -98,7 +99,7 @@ class SimpleThermalPrinter(Serial):
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
             time.sleep(self.BYTE_TIME)
-        time.sleep(self.BYTE_TIME*4)
+        time.sleep(self.LINE_TIME)
     def close(self):
         super(SimpleThermalPrinter, self).flushOutput()
           
@@ -111,7 +112,6 @@ def main():
         data[i]=int(flip)
         flip=not flip
     for i in range(40):
-        pass
         printer.printPixelLine(data)
     printer.feed()
     
