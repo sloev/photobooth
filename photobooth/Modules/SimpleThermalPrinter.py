@@ -123,6 +123,7 @@ def main():
         flip=not flip
 
     import sys,select
+    print "s for lines"
     try:
         while True:
             time.sleep(1)
