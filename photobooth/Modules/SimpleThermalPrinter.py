@@ -105,7 +105,7 @@ def main():
         flip=not flip
     for i in range(40):
         printer.printPixelLine(data)
-    for i in range(30):
+    for i in range(2):
         printer.feed()
 if __name__ == '__main__':
     main()
