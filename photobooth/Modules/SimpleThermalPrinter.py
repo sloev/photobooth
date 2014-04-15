@@ -7,6 +7,7 @@ github.com/patriciogonzalezvivo/ofxThermalPrinter
 and
 Python library for the Adafruit Thermal Printer
 
+
 '''
 from serial import Serial
 import time
@@ -22,6 +23,7 @@ class MyClass(Serial):
         Constructor
         '''
         baudrate = 19200
+        
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, args)
