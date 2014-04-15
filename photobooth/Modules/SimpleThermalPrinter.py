@@ -36,7 +36,7 @@ class SimpleThermalPrinter(Serial):
         Serial.__init__(self, "/dev/ttyAMA0", baudrate,timeout=1000)
         
         time.sleep(1)
-        #self.reset()
+        self.reset()
         time.sleep(1)
         
         self.setControlParameters()
