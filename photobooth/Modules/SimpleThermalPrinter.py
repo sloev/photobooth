@@ -66,8 +66,8 @@ class SimpleThermalPrinter(Serial):
     def printPixelLine(self,pixels):#takes a list of booleans
         width=len(pixels)
         
-        if width>384:
-            width=384
+        if width>383:
+            width=383
         
         rowBytes=int((width+7)/8)
         
