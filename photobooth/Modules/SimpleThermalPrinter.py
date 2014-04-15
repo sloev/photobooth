@@ -112,8 +112,19 @@ def main():
     for i in range(384):
         data[i]=int(flip)
         flip=not flip
-    for i in range(40):
-        printer.printPixelLine(data)
+
+    import sys,select
+    try:
+        while True:
+            time.sleep(1)
+            while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+                c = sys.stdin.readline()
+                c=c[0:1]
+                if(c=='s'): 
+                    printer.printPixelLine(data)
+    except KeyboardInterrupt:
+        print("exiting")
+        pass
     printer.feed()
     
     printer.close()
