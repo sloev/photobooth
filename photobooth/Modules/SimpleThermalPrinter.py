@@ -121,7 +121,8 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='s'): 
-                    printer.printPixelLine(data)
+                    for i in range(40):
+                        printer.printPixelLine(data)
     except KeyboardInterrupt:
         print("exiting")
         pass
