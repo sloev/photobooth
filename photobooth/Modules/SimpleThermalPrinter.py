@@ -113,7 +113,7 @@ class SimpleThermalPrinter(Serial):
         height=255
         width=48
         for i in range(width*height):
-            data+=255
+            data+=(255)
         command=[18,42,height,width]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
