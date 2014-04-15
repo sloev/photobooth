@@ -123,6 +123,7 @@ def main():
                 if(c=='s'): 
                     for i in range(40):
                         printer.printPixelLine(data)
+                        printer.feed()
     except KeyboardInterrupt:
         print("exiting")
         pass
