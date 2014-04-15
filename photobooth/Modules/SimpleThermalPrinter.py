@@ -34,7 +34,10 @@ class SimpleThermalPrinter(Serial):
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate)
         
+        time.sleep(1)
         self.reset()
+        time.sleep(1)
+        
         self.setControlParameters()
         self.setDensity()
         self.setStatus()
@@ -105,8 +108,7 @@ def main():
         flip=not flip
     for i in range(40):
         printer.printPixelLine(data)
-    for i in range(2):
-        printer.feed()
+    printer.feed()
 if __name__ == '__main__':
     main()
 
