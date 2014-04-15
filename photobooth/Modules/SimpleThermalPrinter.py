@@ -42,10 +42,17 @@ class SimpleThermalPrinter(Serial):
         self.setControlParameters()
         self.setDensity()
         self.setStatus()
+        self.reverseFlip()
         self.feed()
         
     def reset(self):
         command=[27,64]
+        self.writeBytes(command)
+        
+    def reverseFlip(self):
+        command=[29,66,1]
+        self.writeBytes(command)
+        command=[29,66,0]
         self.writeBytes(command)
         
     def feed(self,lines=1):
@@ -101,6 +108,7 @@ class SimpleThermalPrinter(Serial):
             super(SimpleThermalPrinter, self).write(char)
             time.sleep(self.BYTE_TIME)
         time.sleep(self.LINE_TIME)
+        
     def close(self):
         self.setStatus(False)
         super(SimpleThermalPrinter, self).flushOutput()
