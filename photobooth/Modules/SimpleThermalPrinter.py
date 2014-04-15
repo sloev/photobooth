@@ -46,8 +46,12 @@ class SimpleThermalPrinter(Serial):
         #self.feed()
         
     def reset(self):
+        command=[12]#flush
+        self.writeBytes(command)
+
         command=[27,64]
         self.writeBytes(command)
+
         
     def reverseFlip(self):
         command=[29,66,1]
@@ -62,7 +66,8 @@ class SimpleThermalPrinter(Serial):
     def setControlParameters(self,heatingDots=60,  heatingTime=45, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
         self.writeBytes(command)
-        self.writeBytes(27, 51, 24)
+        command=[27, 51, 24]
+        self.writeBytes(command)
     
     def setDensity(self,printDensity=14, printBreakTime=4):
         command=[18,35,(printBreakTime << 5) | printDensity]
