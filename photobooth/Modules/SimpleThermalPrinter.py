@@ -120,7 +120,7 @@ def main():
     data2=[1]*384
     flip=True
     for i in range(384):
-        data1[i]=int(0)
+        data1[i]=int(flip)
         flip=not flip
 
     import sys,select
