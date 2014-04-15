@@ -30,7 +30,7 @@ class SimpleThermalPrinter(Serial):
         '''
         baudrate = 19200
         self.BYTE_TIME =(11.0*2) / float(baudrate)
-        self.LINE_TIME=0.05
+        self.LINE_TIME=self.BYTE_TIME*10
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate,timeout=1000)
