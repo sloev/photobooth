@@ -80,30 +80,31 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(command)
         
     def printPixelLine(self,pixels):#takes a list of booleans
-        width=len(pixels)
+        #width=len(pixels)
         
-        if width>384:
-            width=384
+        #if width>384:
+            #width=384
         
-        rowBytes=int((width+7)/8)
-        print rowBytes
+        #rowBytes=int((width+7)/8)
         
-        rowBytesClipped=rowBytes
-        print rowBytesClipped
+        rowBytesClipped=48
+        
         if rowBytesClipped >= 48:
             rowBytesClipped=48
         
-        data=[0]*(rowBytesClipped*254)
-        for i in range(254):
-            for j in range(width):
-                bit=0
-                if pixels[i]:
-                    bit=1
-                index=int((i+j)/8)
-                byte=bit<<(7 - j % 8)
-                data[index]+=byte
-                
-        command=[18,42,254,rowBytesClipped]
+        data=[0]*rowBytesClipped
+        chunk=255
+        for t in range(48*255):
+            
+        #for i in range(width):
+            bit=0
+            if pixels[t]:
+                bit=1
+            index=int(t/8)
+            byte=bit<<(7 - t % 8)
+            data[index]+=byte
+            
+        command=[18,42,chunk,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
@@ -124,8 +125,8 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*384
-    data2=[1]*384
+    data1=[1]*384*255
+    data2=[1]*384*255
     flip=True
     for i in range(384):
         data1[i]=int(flip)
@@ -140,12 +141,12 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='d'): 
-                    for i in range(1):
+                    for i in range(40):
                         printer.printPixelLine(data2)
                         printer.feed()
                     print "done - press s or d for lines"
                 if(c=='s'): 
-                    for i in range(1):
+                    for i in range(40):
                         printer.printPixelLine(data1)
                         printer.feed()
                     print "done - press s or d for lines"
