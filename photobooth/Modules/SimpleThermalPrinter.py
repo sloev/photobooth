@@ -113,7 +113,7 @@ class SimpleThermalPrinter(Serial):
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
             time.sleep(self.BYTE_TIME)
-        time.sleep(self.LINE_TIME)
+        #time.sleep(self.LINE_TIME)
         
     def close(self):
         self.setStatus(False)
