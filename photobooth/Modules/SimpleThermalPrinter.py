@@ -82,13 +82,14 @@ class SimpleThermalPrinter(Serial):
     def printPixelLine(self,pixels):#takes a list of booleans
         width=len(pixels)
         
-        if width>383:
-            width=383
+        if width>384:
+            width=384
         
         rowBytes=int((width+7)/8)
+        print rowBytes
         
         rowBytesClipped=rowBytes
-        
+        print rowBytesClipped
         if rowBytesClipped >= 48:
             rowBytesClipped=48
         
@@ -102,11 +103,11 @@ class SimpleThermalPrinter(Serial):
             byte=bit<<(7 - i % 8)
             data[index]+=byte
             
-        command=[18,42,1,rowBytesClipped]+data
+        command=[18,42,1,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
-        #self.writeBytes(data)
+        self.writeBytes(data)
         #time.sleep(self.BYTE_TIME*len(data))
             
     def writeBytes(self, bytes):
