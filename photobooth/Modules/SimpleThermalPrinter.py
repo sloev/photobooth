@@ -93,17 +93,17 @@ class SimpleThermalPrinter(Serial):
         if rowBytesClipped >= 48:
             rowBytesClipped=48
         
-        data=[0]*rowBytesClipped
-        
-        for i in range(width):
-            bit=0
-            if pixels[i]:
-                bit=1
-            index=int(i/8)
-            byte=bit<<(7 - i % 8)
-            data[index]+=byte
-            
-        command=[18,42,1,rowBytesClipped]
+        data=[0]*rowBytesClipped*255
+        for i in range(255):
+            for i in range(width):
+                bit=0
+                if pixels[i]:
+                    bit=1
+                index=int(i/8)
+                byte=bit<<(7 - i % 8)
+                data[index]+=byte
+                
+        command=[18,42,255,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
@@ -140,12 +140,12 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='d'): 
-                    for i in range(40):
+                    for i in range(1):
                         printer.printPixelLine(data2)
                         printer.feed()
                     print "done - press s or d for lines"
                 if(c=='s'): 
-                    for i in range(40):
+                    for i in range(1):
                         printer.printPixelLine(data1)
                         printer.feed()
                     print "done - press s or d for lines"
