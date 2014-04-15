@@ -42,6 +42,7 @@ class SimpleThermalPrinter(Serial):
         self.setControlParameters()
         self.setDensity()
         self.setStatus()
+        self.feed()
         
     def reset(self):
         command=[27,64]
