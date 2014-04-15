@@ -32,7 +32,7 @@ class SimpleThermalPrinter(Serial):
         self.BYTE_TIME =(11.0) / float(baudrate)
 
         args = [ "/dev/ttyAMA0", baudrate ]
-        Serial.__init__(self, "/dev/ttyAMA0", baudrate)
+        Serial.__init__(self, "/dev/ttyAMA0", baudrate,timeout=1000)
         
         time.sleep(1)
         self.reset()
@@ -99,6 +99,8 @@ class SimpleThermalPrinter(Serial):
             super(SimpleThermalPrinter, self).write(char)
             time.sleep(self.BYTE_TIME)
         time.sleep(self.BYTE_TIME*4)
+    def close(self):
+        super(SimpleThermalPrinter, self).flushOutput()
           
 def main():
     #
