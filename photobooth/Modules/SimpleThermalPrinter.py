@@ -44,7 +44,7 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(command)
     def feed(self):
         command=[10]
-        self.writeBytes(10)
+        self.writeBytes(command)
 
     def setControlParameters(self,heatingDots=20,  heatingTime=200, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
