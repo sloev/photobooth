@@ -89,6 +89,7 @@ class SimpleThermalPrinter(Serial):
             time.sleep(self.BYTE_TIME)
           
 def main():
+    #
     printer=SimpleThermalPrinter()  
     data=[0]*384
     flip=True
