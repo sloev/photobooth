@@ -108,6 +108,7 @@ def main():
         data[i]=int(flip)
         flip=not flip
     for i in range(40):
+        pass
         #printer.printPixelLine(data)
     printer.feed()
 if __name__ == '__main__':
