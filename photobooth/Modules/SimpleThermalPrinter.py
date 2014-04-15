@@ -97,9 +97,9 @@ class SimpleThermalPrinter(Serial):
         for t in range(rowBytesClipped*chunk):
             
         #for i in range(width):
-            bit=0
+            bit=1
             if pixels[t]:
-                bit=1
+                pass#bit=1
             index=int(t/8)
             byte=bit<<(7 - t % 8)
             data[index]+=byte
@@ -125,7 +125,7 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*(384*255)
+    data1=[1]*(384*255*)
     data2=[1]*(384*255)
     flip=True
     for i in range(384*255):
