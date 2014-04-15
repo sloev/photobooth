@@ -71,7 +71,7 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(command)
     
     def setDensity(self,printDensity=14, printBreakTime=4):
-        command=[18,35,(printBreakTime << 5) | printDensity]
+        command=[18,35,(printDensity << 4) | printBreakTime]#(printBreakTime << 4) | printDensity]
         self.writeBytes(command)
         
     def setStatus(self,online=True):
