@@ -101,8 +101,8 @@ class SimpleThermalPrinter(Serial):
             index=int(i/8)
             byte=bit<<(7 - i % 8)
             data[index]+=byte
-            
-        command=[18,42,1,rowBytesClipped]
+        data+=data
+        command=[18,42,2,rowBytesClipped]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
@@ -120,6 +120,7 @@ class SimpleThermalPrinter(Serial):
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
             
         self.writeBytes(data)
+    
             
     def writeBytes(self, bytes):
         counter=0
@@ -161,6 +162,10 @@ def main():
                     print "done - press s or d for lines"
                 if(c=='s'): 
                     for i in range(1):
+                        printer.printPixelLine(data1)
+                        printer.feed()
+                if(c=='f'): 
+                    for i in range(40):
                         printer.printPixelLine(data1)
                         printer.feed()
                     print "done - press s or d for lines"
