@@ -116,25 +116,31 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data=[0]*384
+    data1=[1]*384
+    data2=data1
     flip=True
     for i in range(384):
-        data[i]=int(flip)
+        data1[i]=int(flip)
         flip=not flip
 
     import sys,select
-    print "s for lines"
+    print "s or d for lines"
     try:
         while True:
             time.sleep(1)
             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
                 c = sys.stdin.readline()
                 c=c[0:1]
+                if(c=='d'): 
+                    for i in range(40):
+                        printer.printPixelLine(data2)
+                        printer.feed()
+                    print "done - press s or d for lines"
                 if(c=='s'): 
                     for i in range(40):
-                        printer.printPixelLine(data)
+                        printer.printPixelLine(data1)
                         printer.feed()
-                    print "done - press s for lines"
+                    print "done - press s or d for lines"
     except KeyboardInterrupt:
         print("exiting")
         pass
