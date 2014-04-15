@@ -62,6 +62,7 @@ class SimpleThermalPrinter(Serial):
     def setControlParameters(self,heatingDots=60,  heatingTime=45, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
         self.writeBytes(command)
+        self.writeBytes(27, 51, 24)
     
     def setDensity(self,printDensity=14, printBreakTime=4):
         command=[18,35,(printBreakTime << 5) | printDensity]
