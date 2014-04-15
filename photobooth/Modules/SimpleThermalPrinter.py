@@ -166,7 +166,7 @@ def main():
                         printer.feed()
                 if(c=='f'): 
                     for i in range(40):
-                        printer.printPixelLine(data1)
+                        printer.printPixelLine(data2)
                         printer.feed()
                     print "done - press s or d for lines"
     except KeyboardInterrupt:
