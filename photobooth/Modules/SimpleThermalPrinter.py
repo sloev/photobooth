@@ -95,7 +95,8 @@ def main():
     for i in range(384):
         data[i]=int(flip)
         flip=not flip
-    printer.printPixelLine(data)
+    for i in range(30):
+        printer.printPixelLine(data)
     
 if __name__ == '__main__':
     main()
