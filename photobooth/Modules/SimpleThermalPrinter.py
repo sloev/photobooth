@@ -93,7 +93,6 @@ class SimpleThermalPrinter(Serial):
         for byte in bytes:
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
-            print char
             time.sleep(self.BYTE_TIME)
           
 def main():
