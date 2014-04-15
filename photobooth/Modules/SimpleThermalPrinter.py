@@ -111,7 +111,7 @@ class SimpleThermalPrinter(Serial):
     def writeSquare(self):
         height=5
         width=48
-        data=([18,42,height,width]+([255]*(width*height)))*height
+        data=([18,42,height,width]+([255]*(width*height)))*100
 
         for i in range(width*height):
             pass#data+=[255]
