@@ -33,10 +33,10 @@ class SimpleThermalPrinter(Serial):
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate)
-        
+        self.setStatus()
+
         self.setControlParameters()
         self.setDensity()
-        self.setStatus()
     
     def setControlParameters(self,heatingDots=20,  heatingTime=200, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
@@ -83,7 +83,9 @@ class SimpleThermalPrinter(Serial):
             
     def writeBytes(self, bytes):
         for byte in bytes:
-            super(SimpleThermalPrinter, self).write(chr(byte))
+            char=chr(byte)
+            super(SimpleThermalPrinter, self).write(char)
+            print char
             time.sleep(self.BYTE_TIME)
           
 def main():
