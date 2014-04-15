@@ -43,7 +43,7 @@ class SimpleThermalPrinter(Serial):
         self.setDensity()
         self.setStatus()
         self.reverseFlip()
-        self.feed()
+        #self.feed()
         
     def reset(self):
         command=[27,64]
