@@ -114,6 +114,8 @@ def main():
         pass
         printer.printPixelLine(data)
     printer.feed()
+    
+    printer.close()
 if __name__ == '__main__':
     main()
 
