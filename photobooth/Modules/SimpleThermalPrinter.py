@@ -42,6 +42,9 @@ class SimpleThermalPrinter(Serial):
     def reset(self):
         command=[27,64]
         self.writeBytes(command)
+    def feed(self):
+        command=[10]
+        self.writeBytes(10)
 
     def setControlParameters(self,heatingDots=20,  heatingTime=200, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
@@ -101,9 +104,10 @@ def main():
     for i in range(384):
         data[i]=int(flip)
         flip=not flip
-    for i in range(30):
+    for i in range(40):
         printer.printPixelLine(data)
-    
+    for i in range(30):
+        printer.feed()
 if __name__ == '__main__':
     main()
 
