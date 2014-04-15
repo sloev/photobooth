@@ -29,7 +29,7 @@ class SimpleThermalPrinter(Serial):
         Constructor
         '''
         baudrate = 19200
-        self.BYTE_TIME =(11.0*2) / float(baudrate)
+        self.BYTE_TIME =(11.0) / float(baudrate)
         self.LINE_TIME=self.BYTE_TIME*10
 
         args = [ "/dev/ttyAMA0", baudrate ]
@@ -42,7 +42,7 @@ class SimpleThermalPrinter(Serial):
         self.setControlParameters()
         self.setDensity()
         self.setStatus()
-        self.reverseFlip()
+        #self.reverseFlip()
         #self.feed()
         
     def reset(self):
@@ -64,10 +64,10 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(command)
 
 #    def setControlParameters(self,heatingDots=60,  heatingTime=200, heatingInterval=250):
-    def setControlParameters(self,heatingDots=7,  heatingTime=120, heatingInterval=50):
+    def setControlParameters(self,heatingDots=7,  heatingTime=80, heatingInterval=2):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
         self.writeBytes(command)
-        command=[27, 51, 0]
+        command=[27, 51, 1]
         self.writeBytes(command)
     
     def setDensity(self,printDensity=15, printBreakTime=15):
