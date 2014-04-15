@@ -72,7 +72,7 @@ class SimpleThermalPrinter(Serial):
                 bit=1
             index=int(i/8)
             byte=bit<<(7 - i % 8)
-            data[index]+=bit
+            data[index]+=byte
             
         command=[18,42,1,rowBytesClipped]
         self.writeBytes(command)
