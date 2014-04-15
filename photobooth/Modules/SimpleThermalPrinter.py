@@ -29,14 +29,19 @@ class SimpleThermalPrinter(Serial):
         Constructor
         '''
         baudrate = 19200
-        self.BYTE_TIME =(11.0 *10) / float(baudrate)
+        self.BYTE_TIME =(11.0) / float(baudrate)
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate)
-
+        
+        self.reset()
         self.setControlParameters()
         self.setDensity()
         self.setStatus()
+        
+    def reset(self):
+        command=[27,64]
+        self.writeBytes(command)
 
     def setControlParameters(self,heatingDots=20,  heatingTime=200, heatingInterval=250):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
