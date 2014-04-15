@@ -7,6 +7,11 @@ github.com/patriciogonzalezvivo/ofxThermalPrinter
 and
 Python library for the Adafruit Thermal Printer
 
+todo:
+initialize density and setup
+
+print line
+
 
 '''
 from serial import Serial
@@ -29,6 +34,6 @@ class MyClass(Serial):
         Serial.__init__(self, args)
 
         
-                self.writeBytes(
+                #self.writeBytes(
 
         
