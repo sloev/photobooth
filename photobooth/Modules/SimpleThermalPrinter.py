@@ -110,7 +110,7 @@ def main():
         flip=not flip
     for i in range(40):
         pass
-        #printer.printPixelLine(data)
+        printer.printPixelLine(data)
     printer.feed()
 if __name__ == '__main__':
     main()
