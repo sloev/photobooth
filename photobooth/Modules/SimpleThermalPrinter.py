@@ -64,7 +64,7 @@ class SimpleThermalPrinter(Serial):
         if rowBytesClipped >= 48:
             rowBytesClipped=48
         
-        data=[]
+        data=[0]*rowBytesClipped
         
         for i in range(width):
             bit=0
@@ -88,7 +88,7 @@ class SimpleThermalPrinter(Serial):
           
 def main():
     printer=SimpleThermalPrinter()  
-    data=[]
+    data=[0]*384
     flip=True
     for i in range(384):
         data[i]=int(flip)
