@@ -94,7 +94,7 @@ class SimpleThermalPrinter(Serial):
         chunk=255
 
         data=[0]*(rowBytesClipped*chunk)
-        for t in range(48*255):
+        for t in range(rowBytesClipped*chunk):
             
         #for i in range(width):
             bit=0
@@ -125,10 +125,10 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*384*255
-    data2=[1]*384*255
+    data1=[1]*(384*255)
+    data2=[1]*(384*255)
     flip=True
-    for i in range(384):
+    for i in range(384*255):
         data1[i]=int(flip)
         flip=not flip
 
@@ -141,12 +141,12 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='d'): 
-                    for i in range(40):
+                    for i in range(1):
                         printer.printPixelLine(data2)
                         printer.feed()
                     print "done - press s or d for lines"
                 if(c=='s'): 
-                    for i in range(40):
+                    for i in range(1):
                         printer.printPixelLine(data1)
                         printer.feed()
                     print "done - press s or d for lines"
