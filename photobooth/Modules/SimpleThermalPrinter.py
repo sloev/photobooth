@@ -124,6 +124,7 @@ def main():
                     for i in range(40):
                         printer.printPixelLine(data)
                         printer.feed()
+                    print "done - press s for lines"
     except KeyboardInterrupt:
         print("exiting")
         pass
