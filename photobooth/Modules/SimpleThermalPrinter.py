@@ -109,11 +109,12 @@ class SimpleThermalPrinter(Serial):
         self.writeBytes(data)
         #time.sleep(self.BYTE_TIME*len(data))
     def writeSquare(self):
-        data=[]
         height=255
         width=48
+        data=[1]*(width*height)
+
         for i in range(width*height):
-            data+=(255)
+            pass#data+=[255]
         command=[18,42,height,width]
         self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
