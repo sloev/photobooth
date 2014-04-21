@@ -84,6 +84,14 @@ class SimpleThermalPrinter(Serial):
             data.append(byt)
             
         self.writeLine(data)
+        
+    def printPixelArray(self,pixels):
+        self.reset()
+        time.sleep(0.5)
+        for i in range(0,len(pixels),384):
+            self.writePixelLine(pixels[i:i+384])
+        self.feed()
+        
 
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
@@ -116,23 +124,13 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='s'): 
-                    data=[]
-                    counter=0
-                    thresh=30
-                    bol=False
-                    for i in range(384*500):
-                        tmp=0
-                        counter+=1
-                        if counter>thresh:
-                            counter=0
-                            bol=not bol
-                        if bol:    
-                            tmp=1
-                        data.append(tmp)
-                    for i in range(0,len(tmptmp),384):
+                    printer.printPixelArray(tmptmp)
+                 
+#                    for i in range(0,len(tmptmp),384):
                         
-                        printer.writePixelLine(tmptmp[i:i+384])
-                    printer.feed()
+ #                       printer.writePixelLine(tmptmp[i:i+384])
+  #                  printer.feed()
+  
                     print "done - press s or d for lines"
                     
     except KeyboardInterrupt:
