@@ -78,54 +78,12 @@ class SimpleThermalPrinter(Serial):
         online=int(online)
         command=[37,62,online]
         self.writeBytes(command)
-        
-    def printPixelLine(self,pixels):#take a list of booleans
-        width=len(pixels)
-        
-        if width>384:
-            width=384
-        
-        rowBytes=int((width+7)/8)
-        
-        rowBytesClipped=rowBytes
-        
-        if rowBytesClipped >= 48:
-            rowBytesClipped=48
-        
-        data=[0]*rowBytesClipped
-        
-        for i in range(width):
-            bit=0
-            if pixels[i]:
-                bit=1
-            index=int(i/8)
-            byte=bit<<(7 - i % 8)
-            data[index]+=byte
-        #data+=data
-        command=[18,42,0,rowBytesClipped]
-        self.writeBytes(command)
-        #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
-            
-        self.writeBytes(data)
-        #time.sleep(self.BYTE_TIME*len(data))
+     
     def writeSquare(self):
         data=[18,42,1,48]+([255]*48)
       
         self.writeLine(data)
-    
-            
-    def writeBytes(self, bytes):
-        counter=0
-        for byte in bytes:
-            char=chr(byte)
-            super(SimpleThermalPrinter, self).write(char)
-            #time.sleep(self.BYTE_TIME)
-        #time.sleep(self.BYTE_TIME*52)
-            #time.sleep(self.BYTE_TIME)
-            if counter>48:
-                counter=0
-                time.sleep(self.BYTE_TIME*4)
-        #time.sleep(self.LINE_TIME)
+
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
         super(SimpleThermalPrinter, self).write(line)
@@ -158,15 +116,6 @@ def main():
                     for i in range(500):
                         printer.writeSquare()
                     printer.feed()
-                    print "done - press s or d for lines"
-                if(c=='s'): 
-                    for i in range(1):
-                        printer.printPixelLine(data1)
-                        printer.feed()
-                if(c=='f'): 
-                    for i in range(40):
-                        printer.printPixelLine(data2)
-                        printer.feed()
                     print "done - press s or d for lines"
     except KeyboardInterrupt:
         print("exiting")
