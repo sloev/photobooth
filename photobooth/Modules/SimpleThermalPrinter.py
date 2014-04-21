@@ -61,7 +61,7 @@ class SimpleThermalPrinter(Serial):
         
     def feed(self,lines=1):
         command=[27,74,lines]
-        self.writeBytes(command)
+        self.writeLine(command)
 
 #    def setControlParameters(self,heatingDots=60,  heatingTime=200, heatingInterval=250):
     def setControlParameters(self,heatingDots=7,  heatingTime=80, heatingInterval=2):
@@ -116,10 +116,13 @@ def main():
                     data=[]
                     counter=0
                     thresh=30
+                    bol=False
                     for i in range(384*500):
                         tmp=0
                         if counter>thresh:
                             counter=0
+                            bol=not bol
+                        if bol:    
                             tmp=255
                         data.append(tmp)
                     for i in range(0,len(data),384):
