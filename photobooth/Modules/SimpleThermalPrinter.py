@@ -95,6 +95,7 @@ class SimpleThermalPrinter(Serial):
         img = image.convert('L')
         pixelArray=img.load()
         
+        
 
         threshold = 255*[0] + 255*[255]
         print "starting to dither"
@@ -153,8 +154,14 @@ def main():
     #
     printer=SimpleThermalPrinter()  
     
-    import sys,select,Image
+    import sys,select,Image,ImageOps
     img=Image.open("test.jpg")
+    width,height=img.size
+
+    img=img.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+    img=img.resize((384,384))
+    img=ImageOps.grayscale(img)
+        
     img=printer.raster(img)
     
     print "s or d for lines"
