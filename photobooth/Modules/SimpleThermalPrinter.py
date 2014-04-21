@@ -100,7 +100,7 @@ def main():
     printer=SimpleThermalPrinter()  
     
     import sys,select,Image,ImageOps
-    from Modules.ImageProcessor import ImageProcessor
+    from ImageProcessor import ImageProcessor
     im=ImageProcessor
     print "loading image"
     img=Image.open("test.jpg")
