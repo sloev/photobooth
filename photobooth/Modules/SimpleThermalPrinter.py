@@ -88,7 +88,6 @@ class SimpleThermalPrinter(Serial):
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
         super(SimpleThermalPrinter, self).write(line)
-        #time.sleep(self.BYTE_TIME*len(bytes))
 
         
     def close(self):
