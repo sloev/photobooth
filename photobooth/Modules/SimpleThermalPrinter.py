@@ -143,7 +143,8 @@ class SimpleThermalPrinter(Serial):
                     except IndexError:
                         pass
                 '''
-        print "finnished dithering"
+        print "finnished dithering, putting image"
+        img.putdata(pixelArray)
         return img#.copy()
     
     def close(self):
@@ -155,13 +156,15 @@ def main():
     printer=SimpleThermalPrinter()  
     
     import sys,select,Image,ImageOps
+    print "loading image"
     img=Image.open("test.jpg")
+    print "resizing image"
     width,height=img.size
 
     img=img.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
     img=img.resize((384,384))
     img=ImageOps.grayscale(img)
-        
+    print "done"
     img=printer.raster(img)
     
     print "s or d for lines"
