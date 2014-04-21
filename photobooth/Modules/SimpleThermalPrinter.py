@@ -101,7 +101,7 @@ def main():
     
     import sys,select,Image,ImageOps
     from ImageProcessor import ImageProcessor
-    im=ImageProcessor
+    im=ImageProcessor()
     print "loading image"
     img=Image.open("test.jpg")
     print "resizing image"
