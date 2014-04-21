@@ -113,8 +113,18 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='d'): 
-                    for i in range(500):
-                        printer.writeSquare()
+                    data=[]
+                    counter=0
+                    thresh=30
+                    for i in range(384*500):
+                        tmp=0
+                        if counter>thresh:
+                            counter=0
+                            tmp=1
+                        data+=tmp
+                    for i in range(0,len(data),384):
+                        
+                        printer.writeSquare(data[i,i+384])
                     printer.feed()
                     print "done - press s or d for lines"
     except KeyboardInterrupt:
