@@ -98,7 +98,7 @@ class SimpleThermalPrinter(Serial):
         
         
 
-        threshold = 255*[0] + 255*[255]
+        threshold = 128*[0] + 128*[255]
         print "starting to dither"
         for y in range(height):
             for x in range(width):
