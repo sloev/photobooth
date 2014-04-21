@@ -74,8 +74,8 @@ class SimpleThermalPrinter(Serial):
      
     def writePixelLine(self,pixels):#always takes a list of 384 pixels
         width=len(pixels)
-        if width>384:
-            width=384
+     #   if width>384:
+      #      width=384
         data=[18,42,1,48]
         for i in range(0,width,8):
             byt=0
@@ -89,7 +89,56 @@ class SimpleThermalPrinter(Serial):
         line=''.join(chr(b) for b in bytes)
         super(SimpleThermalPrinter, self).write(line)
 
+    def raster(self,image):
+        width,height=image.size
+
+        img = image.convert('L')
+
+        threshold = 255*[0] + 255*[255]
+        print "starting to dither"
+        for y in range(img.size[1]):
+            for x in range(img.size[0]):
         
+                old = img.getpixel((x, y))
+                new = threshold[old]
+                err = (old - new) >> 3 # divide by 8
+                    
+                img.putpixel((x, y), new)
+                nxy=(x+1,y)
+                if nxy[0]<width:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x+2,y)
+                if nxy[0]<width:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x-1,y+1)
+                if nxy[0]>-1 and nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x,y+1)
+                if nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x+1,y+1)
+                if nxy[0]<width and nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x,y+2)
+                if nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                '''
+                        
+                for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
+                    try:
+                        img.putpixel(nxy, img.getpixel(nxy) + err)
+                    except IndexError:
+                        pass
+                '''
+        print "finnished dithering"
+        return img#.copy()
+    
     def close(self):
         self.setStatus(False)
         super(SimpleThermalPrinter, self).flushOutput()
@@ -97,14 +146,11 @@ class SimpleThermalPrinter(Serial):
 def main():
     #
     printer=SimpleThermalPrinter()  
-    data1=[1]*384
-    data2=[1]*384
-    flip=True
-    for i in range(384):
-        data1[i]=int(flip)
-        flip=not flip
-
-    import sys,select
+    
+    import sys,select,Image
+    img=Image.open("test.jpg")
+    img=printer.raster(img)
+    
     print "s or d for lines"
     try:
         while True:
@@ -112,25 +158,6 @@ def main():
             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
                 c = sys.stdin.readline()
                 c=c[0:1]
-                if(c=='d'): 
-                    data=[]
-                    counter=0
-                    thresh=11
-                    bol=False
-                    for i in range(48*500):
-                        tmp=0
-                        counter+=1
-                        if counter>thresh:
-                            counter=0
-                            bol=not bol
-                        if bol:    
-                            tmp=255
-                        data.append(tmp)
-                    for i in range(0,len(data),48):
-                        pass
-                        #printer.writeSquare(data[i:i+48])
-                    printer.feed()
-                    print "done - press s or d for lines"
                 if(c=='s'): 
                     data=[]
                     counter=0
@@ -150,6 +177,7 @@ def main():
                         printer.writePixelLine(data[i:i+384])
                     printer.feed()
                     print "done - press s or d for lines"
+                    
     except KeyboardInterrupt:
         print("exiting")
         pass
