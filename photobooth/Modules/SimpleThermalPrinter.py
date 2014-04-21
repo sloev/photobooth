@@ -215,9 +215,9 @@ def main():
                         if bol:    
                             tmp=1
                         data.append(tmp)
-                    for i in range(0,len(data),384):
+                    for i in range(0,len(tmptmp),384):
                         
-                        printer.writePixelLine(data[i:i+384])
+                        printer.writePixelLine(tmptmp[i:i+384])
                     printer.feed()
                     print "done - press s or d for lines"
                     
