@@ -128,7 +128,7 @@ def main():
                         data.append(tmp)
                     for i in range(0,len(data),48):
                         
-                        printer.writeSquare(data[i:i+383])
+                        printer.writeSquare(data[i:i+48])
                     printer.feed()
                     print "done - press s or d for lines"
     except KeyboardInterrupt:
