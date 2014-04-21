@@ -106,7 +106,7 @@ class SimpleThermalPrinter(Serial):
         pixelArray=img.load()
         pixels=[0]*(width*height)
 
-        threshold = 128*[0] + 128*[255]
+        threshold = 100*[0] + 100*[255]
         
         print "starting to dither"
         for y in range(height):
