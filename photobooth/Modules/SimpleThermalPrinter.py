@@ -145,9 +145,9 @@ class SimpleThermalPrinter(Serial):
                         pass
                 '''
         print "finnished dithering, putting image"
-        newim = Image.new("L",img.size)
-        newim.putdata(pixelArray)
-        return newim#.copy()
+        #newim = Image.new("L",img.size)
+        #newim.putdata(pixelArray)
+        return img#.copy()
     
     def close(self):
         self.setStatus(False)
