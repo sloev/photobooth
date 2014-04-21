@@ -131,8 +131,6 @@ class ImageProcessor(object):
             # To save it
             im.save(pathQr)
 
-
-        
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
 
@@ -140,6 +138,79 @@ class ImageProcessor(object):
         print("composing For Printer")
         paths=["","",""]
         return paths
+
+    def resizeForPrinter(self,img):
+        width,height=img.size  
+        if width>384:
+            img=img.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+            img=img.resize((384,384))
+            img=ImageOps.grayscale(img)
+        return img
+    
+    '''
+    returns a pixel array with 1's or 0's
+    '''
+    def rasterForPrinter(self,image):
+        
+        width,height=image.size
+
+        img = image.convert('L')
+        pixelArray=img.load()
+        pixels=[0]*(width*height)
+
+        threshold = 100*[0] + 156*[255]
+        
+        print "starting to dither"
+        for y in range(height):
+            for x in range(width):
+        
+                old=pixelArray[x,y]
+                new = threshold[old]
+                err = (old - new) >> 3 # divide by 8
+                
+                pixelArray[x,y]=new
+                pixels[x+y*width]=new != 255
+
+                nxy=(x+1,y)
+                if nxy[0]<width:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+                
+                nxy=(x+2,y)
+                if nxy[0]<width:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+                
+                nxy=(x-1,y+1)
+                if nxy[0]>-1 and nxy[1]<height:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+                
+                nxy=(x,y+1)
+                if nxy[1]<height:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+                
+                nxy=(x+1,y+1)
+                if nxy[0]<width and nxy[1]<height:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+                
+                nxy=(x,y+2)
+                if nxy[1]<height:
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
+
+                    pixelArray[nxy]=pixelArray[nxy]+err
+
+        print "finnished dithering, putting image"
+        #newim = Image.new("L",img.size)
+        #newim.putdata(pixelArray)
+        return pixels
     
 def main():
     import os
