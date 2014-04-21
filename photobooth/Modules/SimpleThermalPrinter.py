@@ -115,9 +115,9 @@ def main():
                 if(c=='d'): 
                     data=[]
                     counter=0
-                    thresh=30
+                    thresh=11
                     bol=False
-                    for i in range(384*500):
+                    for i in range(48*500):
                         tmp=0
                         counter+=1
                         if counter>thresh:
@@ -126,7 +126,7 @@ def main():
                         if bol:    
                             tmp=255
                         data.append(tmp)
-                    for i in range(0,len(data),384):
+                    for i in range(0,len(data),48):
                         
                         printer.writeSquare(data[i:i+383])
                     printer.feed()
