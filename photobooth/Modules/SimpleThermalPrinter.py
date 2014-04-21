@@ -121,7 +121,7 @@ def main():
                         if counter>thresh:
                             counter=0
                             tmp=1
-                        data+=tmp
+                        data.append(tmp)
                     for i in range(0,len(data),384):
                         
                         printer.writeSquare(data[i:i+384])
