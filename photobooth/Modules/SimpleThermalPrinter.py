@@ -47,10 +47,10 @@ class SimpleThermalPrinter(Serial):
         
     def reset(self):
         command=[12]#flush
-        self.writeBytes(command)
+        self.writeLine(command)
 
         command=[27,64]
-        self.writeBytes(command)
+        self.writeLine(command)
 
         
     def reverseFlip(self):
