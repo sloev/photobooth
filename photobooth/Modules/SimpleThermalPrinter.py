@@ -88,17 +88,26 @@ class SimpleThermalPrinter(Serial):
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
         super(SimpleThermalPrinter, self).write(line)
-
+        
+    def resize(self,img):
+        import Image,ImageOps
+        width,height=img.size  
+        if width>384:
+            img=img.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+            img=img.resize((384,384))
+            img=ImageOps.grayscale(img)
+        return img
+    
     def raster(self,image):
         import Image
         width,height=image.size
 
         img = image.convert('L')
         pixelArray=img.load()
-        
-        
+        pixels=[0]*(width*height)
 
         threshold = 128*[0] + 128*[255]
+        
         print "starting to dither"
         for y in range(height):
             for x in range(width):
@@ -109,33 +118,48 @@ class SimpleThermalPrinter(Serial):
                 err = (old - new) >> 3 # divide by 8
                 
                 pixelArray[x,y]=new
+                pixels[x+y*width]=new==255
+
                # img.putpixel((x, y), new)
                 nxy=(x+1,y)
                 if nxy[0]<width:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
 
                     #img.putpixel(nxy,img.getpixel(nxy)+err)
                 
                 nxy=(x+2,y)
                 if nxy[0]<width:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x-1,y+1)
                 if nxy[0]>-1 and nxy[1]<height:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+1)
                 if nxy[1]<height:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x+1,y+1)
                 if nxy[0]<width and nxy[1]<height:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+2)
                 if nxy[1]<height:
+                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+
                     pixelArray[nxy]=pixelArray[nxy]+err
-                
+                    
+ 
                 '''
                         
                 for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
@@ -147,7 +171,7 @@ class SimpleThermalPrinter(Serial):
         print "finnished dithering, putting image"
         #newim = Image.new("L",img.size)
         #newim.putdata(pixelArray)
-        return img#.copy()
+        return [img,pixels]#.copy()
     
     def close(self):
         self.setStatus(False)
@@ -167,7 +191,7 @@ def main():
     img=img.resize((384,384))
     img=ImageOps.grayscale(img)
     print "done"
-    img=printer.raster(img)
+    [img,tmptmp]=printer.raster(img)
     img.save("test2.jpg")
     
     print "s or d for lines"
