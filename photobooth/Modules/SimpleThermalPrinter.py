@@ -127,7 +127,7 @@ class SimpleThermalPrinter(Serial):
         for byte in bytes:
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
-        time.sleep(self.BYTE_TIME*49)
+        time.sleep(self.BYTE_TIME*52)
             #time.sleep(self.BYTE_TIME)
             #if counter>7:
                 #counter=0
