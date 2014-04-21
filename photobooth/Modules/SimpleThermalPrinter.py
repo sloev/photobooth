@@ -112,7 +112,7 @@ class SimpleThermalPrinter(Serial):
         height=1
         width=48
         data=([18,42,height,width]+([255]*(width*height)))*500
-        print data.size
+        print len(data)
         for i in range(width*height):
             pass#data+=[255]
         command=[18,42,height,width]
