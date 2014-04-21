@@ -96,7 +96,7 @@ class SimpleThermalPrinter(Serial):
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
         super(SimpleThermalPrinter, self).write(line)
-        super(SimpleThermalPrinter, self).flushOutput()
+       # super(SimpleThermalPrinter, self).flushOutput()
 
         
     
