@@ -168,7 +168,7 @@ def main():
     img=ImageOps.grayscale(img)
     print "done"
     img=printer.raster(img)
-    img.save("test2.jpg",'JPG')
+    img.save("test2.jpg")
     
     print "s or d for lines"
     try:
