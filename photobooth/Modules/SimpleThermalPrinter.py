@@ -93,40 +93,46 @@ class SimpleThermalPrinter(Serial):
         width,height=image.size
 
         img = image.convert('L')
+        pixelArray=img.load()
+        
 
         threshold = 255*[0] + 255*[255]
         print "starting to dither"
-        for y in range(img.size[1]):
-            for x in range(img.size[0]):
+        for y in range(height):
+            for x in range(width):
         
-                old = img.getpixel((x, y))
+                #old = img.getpixel((x, y))
+                old=pixelArray[x,y]
                 new = threshold[old]
                 err = (old - new) >> 3 # divide by 8
-                    
-                img.putpixel((x, y), new)
+                
+                pixelArray[x,y]=new
+               # img.putpixel((x, y), new)
                 nxy=(x+1,y)
                 if nxy[0]<width:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
+
+                    #img.putpixel(nxy,img.getpixel(nxy)+err)
                 
                 nxy=(x+2,y)
                 if nxy[0]<width:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x-1,y+1)
                 if nxy[0]>-1 and nxy[1]<height:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+1)
                 if nxy[1]<height:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x+1,y+1)
                 if nxy[0]<width and nxy[1]<height:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+2)
                 if nxy[1]<height:
-                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 '''
                         
