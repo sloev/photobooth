@@ -81,7 +81,7 @@ class SimpleThermalPrinter(Serial):
             byt=0
             for j in range(8):
                 byt += pixels[i+j] << (7 - j)
-            data+=byt
+            data.append(byt)
             
         self.writeLine(data)
 
