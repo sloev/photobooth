@@ -90,6 +90,7 @@ class SimpleThermalPrinter(Serial):
         super(SimpleThermalPrinter, self).write(line)
 
     def raster(self,image):
+        import Image
         width,height=image.size
 
         img = image.convert('L')
