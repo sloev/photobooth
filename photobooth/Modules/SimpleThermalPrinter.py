@@ -79,9 +79,9 @@ class SimpleThermalPrinter(Serial):
         command=[37,62,online]
         self.writeBytes(command)
      
-    def writeSquare(self):
-        data=[18,42,1,48]+([255]*48)
-      
+    def writeSquare(self,data):
+        #data=[18,42,1,48]+([255]*48)
+        data=[18,42,1,48]+data
         self.writeLine(data)
 
     def writeLine(self, bytes):
