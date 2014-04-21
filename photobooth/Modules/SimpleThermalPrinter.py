@@ -119,6 +119,7 @@ def main():
                     bol=False
                     for i in range(384*500):
                         tmp=0
+                        counter+=1
                         if counter>thresh:
                             counter=0
                             bol=not bol
