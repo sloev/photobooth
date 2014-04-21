@@ -123,7 +123,8 @@ class SimpleThermalPrinter(Serial):
                # img.putpixel((x, y), new)
                 nxy=(x+1,y)
                 if nxy[0]<width:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    #pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
 
@@ -131,31 +132,31 @@ class SimpleThermalPrinter(Serial):
                 
                 nxy=(x+2,y)
                 if nxy[0]<width:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x-1,y+1)
                 if nxy[0]>-1 and nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+1)
                 if nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x+1,y+1)
                 if nxy[0]<width and nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+2)
                 if nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
                     #pixelArray[nxy]=pixelArray[nxy]+err
                     
@@ -202,19 +203,7 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='s'): 
-                    data=[]
-                    counter=0
-                    thresh=30
-                    bol=False
-                    for i in range(384*500):
-                        tmp=0
-                        counter+=1
-                        if counter>thresh:
-                            counter=0
-                            bol=not bol
-                        if bol:    
-                            tmp=1
-                        data.append(tmp)
+
                     for i in range(0,len(tmptmp),384):
                         
                         printer.writePixelLine(tmptmp[i:i+384])
