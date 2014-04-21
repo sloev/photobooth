@@ -111,7 +111,7 @@ class SimpleThermalPrinter(Serial):
     def writeSquare(self):
         height=1
         width=48
-        data=([18,42,height,width]+([255]*(width*height)))*500
+        data=([18,42,height,width]+([255]*(width*height)))
         #print len(data)
         for i in range(width*height):
             pass#data+=[255]
@@ -158,9 +158,9 @@ def main():
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='d'): 
-                    for i in range(1):
+                    for i in range(500):
                         printer.writeSquare()
-                        printer.feed()
+                    printer.feed()
                     print "done - press s or d for lines"
                 if(c=='s'): 
                     for i in range(1):
