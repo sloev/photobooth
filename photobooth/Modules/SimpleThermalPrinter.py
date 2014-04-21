@@ -120,7 +120,7 @@ def main():
                         tmp=0
                         if counter>thresh:
                             counter=0
-                            tmp=1
+                            tmp=255
                         data.append(tmp)
                     for i in range(0,len(data),384):
                         
