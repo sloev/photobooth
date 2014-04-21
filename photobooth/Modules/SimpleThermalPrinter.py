@@ -123,7 +123,7 @@ class SimpleThermalPrinter(Serial):
                # img.putpixel((x, y), new)
                 nxy=(x+1,y)
                 if nxy[0]<width:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
 
@@ -131,31 +131,31 @@ class SimpleThermalPrinter(Serial):
                 
                 nxy=(x+2,y)
                 if nxy[0]<width:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x-1,y+1)
                 if nxy[0]>-1 and nxy[1]<height:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+1)
                 if nxy[1]<height:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x+1,y+1)
                 if nxy[0]<width and nxy[1]<height:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+2)
                 if nxy[1]<height:
-                    pixels[nxy[0]*nxy[1]*width]=(pixelArray[nxy]+err)==255
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
                     
