@@ -112,7 +112,7 @@ class SimpleThermalPrinter(Serial):
         height=1
         width=48
         data=([18,42,height,width]+([255]*(width*height)))*500
-        print len(data)
+        #print len(data)
         for i in range(width*height):
             pass#data+=[255]
         command=[18,42,height,width]
@@ -127,7 +127,8 @@ class SimpleThermalPrinter(Serial):
         for byte in bytes:
             char=chr(byte)
             super(SimpleThermalPrinter, self).write(char)
-        time.sleep(self.BYTE_TIME*52)
+            time.sleep(self.BYTE_TIME)
+        #time.sleep(self.BYTE_TIME*52)
             #time.sleep(self.BYTE_TIME)
             #if counter>7:
                 #counter=0
