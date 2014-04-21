@@ -118,8 +118,8 @@ class SimpleThermalPrinter(Serial):
         command=[18,42,height,width]
         #self.writeBytes(command)
         #time.sleep(self.BYTE_TIME*len(command)) #four bytes in command
-            
-        self.writeBytes(data)
+        self.writeLine(data)
+#        self.writeBytes(data)
     
             
     def writeBytes(self, bytes):
@@ -134,6 +134,11 @@ class SimpleThermalPrinter(Serial):
                 counter=0
                 time.sleep(self.BYTE_TIME*4)
         #time.sleep(self.LINE_TIME)
+    def writeLine(self, bytes):
+        line=''.join(chr(b) for b in bytes)
+        super(SimpleThermalPrinter, self).write(line)
+        time.sleep(self.BYTE_TIME*48)
+
         
     def close(self):
         self.setStatus(False)
