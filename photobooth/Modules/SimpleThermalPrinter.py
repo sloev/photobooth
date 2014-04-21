@@ -52,13 +52,6 @@ class SimpleThermalPrinter(Serial):
         command=[27,64]
         self.writeLine(command)
 
-        
-    def reverseFlip(self):
-        command=[29,66,1]
-        self.writeBytes(command)
-        command=[29,66,0]
-        self.writeBytes(command)
-        
     def feed(self,lines=1):
         command=[27,74,lines]
         self.writeLine(command)
@@ -68,20 +61,28 @@ class SimpleThermalPrinter(Serial):
         command=[27,55,heatingDots,heatingTime,heatingInterval]
         self.writeBytes(command)
         command=[27, 51, 1]
-        self.writeBytes(command)
+        self.writeLine(command)
     
     def setDensity(self,printDensity=15, printBreakTime=15):
         command=[18,35,(printDensity << 4) | printBreakTime]
-        self.writeBytes(command)
+        self.writeLine(command)
         
     def setStatus(self,online=True):
         online=int(online)
         command=[37,62,online]
-        self.writeBytes(command)
+        self.writeLine(command)
      
-    def writeSquare(self,data):
-        #data=[18,42,1,48]+([255]*48)
-        data=[18,42,1,48]+data
+    def writePixelLine(self,pixels):#always takes a list of 384 pixels
+        width=len(pixels)
+        if width>384:
+            width=384
+        data=[18,42,1,48]
+        for i in range(0,width,8):
+            byt=0
+            for j in range(8):
+                byt += data[i+j] << (7 - j)
+            data+=byt
+            
         self.writeLine(data)
 
     def writeLine(self, bytes):
@@ -129,6 +130,25 @@ def main():
                     for i in range(0,len(data),48):
                         
                         printer.writeSquare(data[i:i+48])
+                    printer.feed()
+                    print "done - press s or d for lines"
+                if(c=='s'): 
+                    data=[]
+                    counter=0
+                    thresh=30
+                    bol=False
+                    for i in range(384*500):
+                        tmp=0
+                        counter+=1
+                        if counter>thresh:
+                            counter=0
+                            bol=not bol
+                        if bol:    
+                            tmp=1
+                        data.append(tmp)
+                    for i in range(0,len(data),384):
+                        
+                        printer.writeSquare(data[i:i+384])
                     printer.feed()
                     print "done - press s or d for lines"
     except KeyboardInterrupt:
