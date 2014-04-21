@@ -39,9 +39,9 @@ class SimpleThermalPrinter(Serial):
         self.reset()
         time.sleep(1)
         
-        self.setControlParameters()
-        self.setDensity()
-        self.setStatus()
+        #self.setControlParameters()
+        #self.setDensity()
+        #self.setStatus()
         #self.reverseFlip()
         #self.feed()
         
