@@ -106,7 +106,7 @@ class SimpleThermalPrinter(Serial):
         pixelArray=img.load()
         pixels=[0]*(width*height)
 
-        threshold = 128*[0] + 128*[255]
+        threshold = 128*[0] + 128*[1]
         
         print "starting to dither"
         for y in range(height):
@@ -117,48 +117,48 @@ class SimpleThermalPrinter(Serial):
                 new = threshold[old]
                 err = (old - new) >> 3 # divide by 8
                 
-                #pixelArray[x,y]=new
+                pixelArray[x,y]=new
                 pixels[x+y*width]=new==0
 
                # img.putpixel((x, y), new)
                 nxy=(x+1,y)
                 if nxy[0]<width:
-                    #pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
+                    #pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
 
                     #img.putpixel(nxy,img.getpixel(nxy)+err)
                 
                 nxy=(x+2,y)
                 if nxy[0]<width:
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x-1,y+1)
                 if nxy[0]>-1 and nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+1)
                 if nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x+1,y+1)
                 if nxy[0]<width and nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
                 
                 nxy=(x,y+2)
                 if nxy[1]<height:
-                    pixels[nxy[0]+nxy[1]*width]=(pixels[nxy[0]+nxy[1]*width]+err)==0
+                    pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)==0
 
-                    #pixelArray[nxy]=pixelArray[nxy]+err
+                    pixelArray[nxy]=pixelArray[nxy]+err
                     
  
                 '''
