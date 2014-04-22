@@ -28,7 +28,7 @@ class Picamera(object):
         
         for i in range(4):
             time.sleep(intervalSeconds)
-            filename=str(i)+"image.JPG"
+            filename=str(i+1)+"image.JPG"
             self.camera.capture(filename)
         os.chdir(self.current_dir)
         return mydir
