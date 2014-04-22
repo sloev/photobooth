@@ -58,11 +58,12 @@ class Photobooth(object):
         img=self.imageProcessor.composeForPrinterReturnImage(dir)
         img=self.imageProcessor.rasterForPrinter(img)
         self.printer.printPixelArray(img)
+        
         facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
         twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
         
         dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-    
+        
         token=self.imageProcessor.saveImageToOutgoing(
                            dateString,
                            [

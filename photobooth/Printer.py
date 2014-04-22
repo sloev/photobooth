@@ -381,14 +381,40 @@ class ThermalPrinter(object):
                 err = (old - new) >> 3 # divide by 8
                     
                 img.putpixel((x, y), new)
+                nxy=(x+1,y)
+                if nxy[0]<width:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
                 
+                nxy=(x+2,y)
+                if nxy[0]<width:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x-1,y+1)
+                if nxy[0]>-1 and nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x,y+1)
+                if nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x+1,y+1)
+                if nxy[0]<width and nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                nxy=(x,y+2)
+                if nxy[1]<height:
+                    img.putpixel(nxy,img.getpixel(nxy)+err)
+                
+                '''
+                        
                 for nxy in [(x+1, y), (x+2, y), (x-1, y+1), (x, y+1), (x+1, y+1), (x, y+2)]:
                     try:
                         img.putpixel(nxy, img.getpixel(nxy) + err)
                     except IndexError:
                         pass
+                '''
         print "finnished dithering"
-        return img.copy()
+        return img#.copy()
     
 if __name__ == '__main__':
     import sys, os

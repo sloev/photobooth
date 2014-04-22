@@ -31,5 +31,4 @@ class Picamera(object):
             filename=str(i)+"image.jpg"
             self.camera.capture(filename)
         os.chdir(self.current_dir)
-
-        
+        return mydir
