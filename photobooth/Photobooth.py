@@ -57,7 +57,7 @@ class Photobooth(object):
         
         dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         
-        token,qr=self.imageProcessor.saveImageToOutgoing(
+        token=self.imageProcessor.saveImageToOutgoing(
                            dateString,
                            [
                             facebookImageAndString,

@@ -129,12 +129,13 @@ class ImageProcessor(object):
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
             # To save it
-            path=os.path.join(dir,dateString+'_.qr.png')
-            im.save(path)
+            path2=os.path.join(dir,dateString+'_.qr.png')
+            print path2
+            im.save(path2)
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
-        return [tokenString,im]
+        return tokenString
 
     def composeForPrinterReturnPixelArrays(self,imageDir):
         print("composing For Printer")
