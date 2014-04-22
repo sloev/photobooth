@@ -178,6 +178,7 @@ class ImageProcessor(object):
         threshold = 100*[0] + 156*[255]
         
         print "starting to dither"
+        print image
         for y in range(height):
             for x in range(width):
         

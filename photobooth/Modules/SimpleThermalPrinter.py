@@ -87,8 +87,8 @@ class SimpleThermalPrinter(Serial):
         time.sleep(self.BYTE_TIME*len(data))
         
     def printPixelArray(self,pixels):
-        self.reset()
-        time.sleep(1)
+        #self.reset()
+        #time.sleep(1)
         for i in range(0,len(pixels),384):
             self.writePixelLine(pixels[i:i+384])
         print "printed an image, sleeping now"
