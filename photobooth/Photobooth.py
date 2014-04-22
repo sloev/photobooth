@@ -62,7 +62,7 @@ class Photobooth(object):
                            [
                             facebookImageAndString,
                             twitterImageAndString
-                            ])
+                            ],dir)
         pixels=self.imageProcessor.composeForPrinterReturnPixelArrays(dir)
         for pixelarray in pixels:
             self.printer.printPixelArray(pixelarray)
