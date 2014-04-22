@@ -105,7 +105,7 @@ class ImageProcessor(object):
         return [strip,"facebook"]
         #return path
     
-    def saveImageToOutgoing(self,dateString,imageServicenameArray):
+    def saveImageToOutgoing(self,dateString,imageServicenameArray,qrdir):
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         '''making a token for later deletion of image before upload'''
 
@@ -129,27 +129,30 @@ class ImageProcessor(object):
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
             # To save it
+            path=os.path.join(dir,dateString+'_.qr.png')
+            im.save(path)
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
-        return tokenString
+        return [tokenString,im]
 
-    def composeForPrinterReturnImage(self,imageDir):
+    def composeForPrinterReturnPixelArrays(self,imageDir):
         print("composing For Printer")
 
         strip = Image.new('RGB', (384,384*4), (0,0,0)) 
 
         count=0
+        pixels=[]
         for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
             if count>3:
                 break
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
+            pixels+=[self.rasterForPrinter(img)]
             strip.paste(img,(0,count*384))
 
             count+=1
-
-        return strip
+        return pixels
 
     def resizeForPrinter(self,img):
         width,height=img.size  
