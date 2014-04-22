@@ -8,11 +8,9 @@ from Modules.Twitter import Twitter
 from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
 from Modules.SimpleThermalPrinter import SimpleThermalPrinter
-from Modules.UploadServer import UploadServer
 from Modules.Picamera import Picamera
 import json,time,threading, sys, select
 import datetime
-import web
 
 
  
