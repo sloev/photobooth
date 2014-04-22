@@ -168,11 +168,11 @@ class ImageProcessor(object):
     '''
     def rasterForPrinter(self,image):
         
-        image.save("ditheredOld.jpg")
+        #image.save("ditheredOld.jpg")
 
         width,height=image.size
 
-        #img = image.convert('L')
+        img = image.convert('L')
         pixelArray=img.load()
         pixels=[0]*(width*height)
 
