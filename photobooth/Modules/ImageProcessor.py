@@ -144,7 +144,7 @@ class ImageProcessor(object):
         count=0
         pixels=[]
         for inFile in sorted(glob.glob(os.path.join(imageDir, '*.JPG'))):
-            if count>4:
+            if count>2:
                 break
             print inFile
             img=Image.open(inFile)
