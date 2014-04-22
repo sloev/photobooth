@@ -47,14 +47,13 @@ class Photobooth(object):
             print("busy shooting")
         
     def stopShoot(self):
-        self.uploader.stopAll()
         self.stateThread.join()
 
     def shoot(self):
         dir=self.picamera.captureFourImages()
         img=self.imageProcessor.composeForPrinterReturnImage(dir)
-        img=self.imageProcessor.rasterForPrinter(img)
-        self.printer.printPixelArray(img)
+        pixels=self.imageProcessor.rasterForPrinter(img)
+        self.printer.printPixelArray(pixels)
         
         facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
         twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
