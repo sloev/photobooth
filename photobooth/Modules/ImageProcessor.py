@@ -143,8 +143,8 @@ class ImageProcessor(object):
 
         count=0
         pixels=[]
-        for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
-            if count>2:
+        for inFile in sorted(glob.glob(os.path.join(imageDir, '*.JPG'))):
+            if count>4:
                 break
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
