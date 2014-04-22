@@ -164,6 +164,8 @@ class ImageProcessor(object):
     '''
     def rasterForPrinter(self,image):
         
+        image.save("ditheredOld.jpg")
+
         width,height=image.size
 
         img = image.convert('L')
