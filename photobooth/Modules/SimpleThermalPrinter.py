@@ -84,6 +84,7 @@ class SimpleThermalPrinter(Serial):
             data.append(byt)
             
         self.writeLine(data)
+        time.sleep(self.BYTE_TIME*48)
         
     def printPixelArray(self,pixels):
         self.reset()
