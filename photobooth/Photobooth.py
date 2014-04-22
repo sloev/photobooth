@@ -23,11 +23,11 @@ class Photobooth(object):
         '''
         Constructor
         '''
-        config=dict()
-        with open('apiconfigs.txt', 'rb') as fp:
-            config = json.load(fp)
-        self.twitter=Twitter(config["twitter"])
-        self.facebook=Facebook(config["facebook"])
+        #config=dict()
+        #with open('apiconfigs.txt', 'rb') as fp:
+            #config = json.load(fp)
+        #self.twitter=Twitter(config["twitter"])
+        #self.facebook=Facebook(config["facebook"])
         self.imageProcessor=ImageProcessor()
         #self.printer=Printer()
         #self.uploader=UploadServer()
@@ -51,21 +51,22 @@ class Photobooth(object):
 
     def shoot(self):
         dir=self.picamera.captureFourImages()
-        img=self.imageProcessor.composeForPrinterReturnImage(dir)
-        pixels=self.imageProcessor.rasterForPrinter(img)
-        self.printer.printPixelArray(pixels)
-        
+
         facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
         twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
         
         dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         
-        token=self.imageProcessor.saveImageToOutgoing(
+        token,qr=self.imageProcessor.saveImageToOutgoing(
                            dateString,
                            [
                             facebookImageAndString,
                             twitterImageAndString
                             ])
+        pixels=self.imageProcessor.composeForPrinterReturnPixelArrays(dir)
+        for pixelarray in pixels:
+            self.printer.printPixelArray(pixelarray)
+        
         
         '''chdk shooting and downloading'''
         #photoDir=self.camera.captureReturnDir()
