@@ -144,6 +144,7 @@ class ImageProcessor(object):
         count=0
         pixels=[]
         for inFile in sorted(glob.glob(os.path.join(imageDir, '*.JPG'))):
+            '''change to amount of pictures including qr code'''
             if count>2:
                 break
             print inFile
