@@ -130,7 +130,7 @@ class ImageProcessor(object):
                 doneFile.write('done')
             # To save it
             path2=os.path.join(qrdir,"0.JPG")
-            im.save(path2,'JPG')
+            im.save(path2)
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
