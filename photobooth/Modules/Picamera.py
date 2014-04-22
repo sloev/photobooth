@@ -21,7 +21,7 @@ class Picamera(object):
         self.current_dir=os.getcwd()
 
         
-    def captureFourImages(self,intervalSeconds=2):
+    def captureFourImages(self,intervalSeconds=1):
         mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
         os.makedirs(mydir)
         os.chdir(mydir)
