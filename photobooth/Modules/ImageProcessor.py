@@ -129,8 +129,8 @@ class ImageProcessor(object):
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
             # To save it
-            path2=os.path.join(qrdir,dateString+"_.qr.png")
-            im.save(path2)
+            path2=os.path.join(qrdir,"0.JPG")
+            im.save(path2,'JPG')
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
@@ -139,17 +139,17 @@ class ImageProcessor(object):
     def composeForPrinterReturnPixelArrays(self,imageDir):
         print("composing For Printer")
 
-        strip = Image.new('RGB', (384,384*4), (0,0,0)) 
+        #strip = Image.new('RGB', (384,384*4), (0,0,0)) 
 
         count=0
         pixels=[]
         for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
-            if count>3:
+            if count>4:
                 break
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
             pixels+=[self.rasterForPrinter(img)]
-            strip.paste(img,(0,count*384))
+            #strip.paste(img,(0,count*384))
 
             count+=1
         return pixels
