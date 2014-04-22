@@ -88,13 +88,13 @@ class SimpleThermalPrinter(Serial):
         
     def printPixelArray(self,pixels):
         #self.reset()
-        #time.sleep(1)
+        time.sleep(1)
         for i in range(0,len(pixels),384):
             self.writePixelLine(pixels[i:i+384])
         print "printed an image, sleeping now"
-        time.sleep(self.BYTE_TIME*104)
+        time.sleep(1)
         self.feed()
-        time.sleep(self.BYTE_TIME*52)
+        time.sleep(1)
         print "woke up"
         
 
