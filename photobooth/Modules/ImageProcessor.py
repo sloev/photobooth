@@ -134,10 +134,22 @@ class ImageProcessor(object):
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
 
-    def composeForPrinter(self,imageDir):
+    def composeForPrinterReturnImage(self,imageDir):
         print("composing For Printer")
-        paths=["","",""]
-        return paths
+
+        strip = Image.new('RGB', (384,384*4), (0,0,0)) 
+
+        count=0
+        for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
+            if count>3:
+                break
+            img=Image.open(inFile)
+            img=self.resizeForPrinter(img)
+            strip.paste(img,(0,count*384))
+
+            count+=1
+
+        return strip
 
     def resizeForPrinter(self,img):
         width,height=img.size  

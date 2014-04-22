@@ -7,15 +7,15 @@ from Modules.Camera import Camera
 from Modules.Twitter import Twitter
 from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
-from Modules.Printer import Printer
+from Modules.SimpleThermalPrinter import SimpleThermalPrinter
 from Modules.UploadServer import UploadServer
-
+from Modules.Picamera import Picamera
 import json,time,threading, sys, select
 import datetime
 import web
 
 
-
+ 
 class Photobooth(object):
     '''
     classdocs
@@ -31,9 +31,11 @@ class Photobooth(object):
             config = json.load(fp)
         self.twitter=Twitter(config["twitter"])
         self.facebook=Facebook(config["facebook"])
-        self.image_processor=ImageProcessor()
-        self.printer=Printer()
-        self.uploader=UploadServer()
+        self.imageProcessor=ImageProcessor()
+        #self.printer=Printer()
+        #self.uploader=UploadServer()
+        self.picamera=Picamera()
+        self.printer=SimpleThermalPrinter()
         
         '''state thread'''
         self.stateThread=threading.Thread()
@@ -52,17 +54,33 @@ class Photobooth(object):
         self.stateThread.join()
 
     def shoot(self):
+        dir=self.picamera.captureFourImages()
+        img=self.imageProcessor.composeForPrinterReturnImage(dir)
+        img=self.imageProcessor.rasterForPrinter(img)
+        self.printer.printPixelArray(img)
+        facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
+        twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
+        
+        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+    
+        token=self.imageProcessor.saveImageToOutgoing(
+                           dateString,
+                           [
+                            facebookImageAndString,
+                            twitterImageAndString
+                            ])
+        
         '''chdk shooting and downloading'''
-        photoDir=self.camera.captureReturnDir()
-        message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        #photoDir=self.camera.captureReturnDir()
+        #message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         
         '''make photoframe'''
         
         '''upload two first images to twitter'''
-        imagePath=self.image_processor.composeForTwitter(photoDir)
+        #imagePath=self.image_processor.composeForTwitter(photoDir)
         #self.twitter.uploadImage(message,imagePath)
         
-        imagePath=self.image_processor.composeForFacebook(photoDir)
+        #imagePath=self.image_processor.composeForFacebook(photoDir)
         #self.facebook.uploadImage(message,imagePath)
         
         '''make photostrip'''

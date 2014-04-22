@@ -64,7 +64,7 @@ class UploadServer(object):
             delete=False
             if os.path.isfile(targetFile[:len(targetFile)-5]+".delete"):
                 delete=True
-            elif (currentTime - fileTime).total_seconds() > 100:
+            elif (currentTime - fileTime).total_seconds() > 20:
             #if fileTime < datetime.datetime.now()-datetime.timedelta(seconds=20):
                 '''then upload'''
                 serviceName=fileName[17:len(fileName)-5]
