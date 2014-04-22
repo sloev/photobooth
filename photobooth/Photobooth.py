@@ -23,7 +23,6 @@ class Photobooth(object):
         '''
         Constructor
         '''
-        self.camera=Camera()
         config=dict()
         with open('apiconfigs.txt', 'rb') as fp:
             config = json.load(fp)
