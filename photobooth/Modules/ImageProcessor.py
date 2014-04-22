@@ -221,7 +221,7 @@ class ImageProcessor(object):
 
         print "finnished dithering, putting image"
         #newim = Image.new("L",img.size)
-        pixelArray.save("dithered.jpg")
+        image.save("dithered.jpg")
         #newim.putdata(pixelArray)
         return pixels
     
