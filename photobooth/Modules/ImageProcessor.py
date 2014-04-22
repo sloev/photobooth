@@ -146,6 +146,7 @@ class ImageProcessor(object):
         for inFile in sorted(glob.glob(os.path.join(imageDir, '*.JPG'))):
             if count>4:
                 break
+            print inFile
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
             pixels+=[self.rasterForPrinter(img)]
@@ -171,14 +172,13 @@ class ImageProcessor(object):
 
         width,height=image.size
 
-        img = image.convert('L')
+        #img = image.convert('L')
         pixelArray=img.load()
         pixels=[0]*(width*height)
 
         threshold = 100*[0] + 156*[255]
         
         print "starting to dither"
-        print image
         for y in range(height):
             for x in range(width):
         
@@ -227,7 +227,7 @@ class ImageProcessor(object):
 
         print "finnished dithering, putting image"
         #newim = Image.new("L",img.size)
-        image.save("dithered.jpg")
+        #image.save("dithered.jpg")
         #newim.putdata(pixelArray)
         return pixels
     
