@@ -93,7 +93,7 @@ class SimpleThermalPrinter(Serial):
             self.writePixelLine(pixels[i:i+384])
         print "printed an image, sleeping now"
         time.sleep(1)
-        self.feed()
+        #self.feed()
         time.sleep(1)
         print "woke up"
         
