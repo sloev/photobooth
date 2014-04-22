@@ -129,9 +129,7 @@ class ImageProcessor(object):
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
             # To save it
-            print dir
-            path2=os.path.join(dir,"/"+dateString+"_.qr.png")
-            print path2
+            path2=os.path.join(qrdir,dateString+"_.qr.png")
             im.save(path2)
             im.save(pathQr)
 
