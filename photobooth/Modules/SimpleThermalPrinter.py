@@ -49,15 +49,22 @@ class SimpleThermalPrinter(Serial):
         #self.feed()
         
     def reset(self):
+        self.timeoutWait()
         command=[12]#flush
         self.writeLine(command)
 
+
         command=[27,64]
         self.writeLine(command)
+        self.timeoutSet(2*self.dotPrintTime)
+
 
     def feed(self,lines=1):
+        self.timeoutWait()
+
         command=[27,74,lines]
         self.writeLine(command)
+        self.timeoutSet(self.dotFeedTime)
 
 #    def setControlParameters(self,heatingDots=60,  heatingTime=200, heatingInterval=250):
     def setControlParameters(self,heatingDots=7,  heatingTime=80, heatingInterval=2):
@@ -86,8 +93,13 @@ class SimpleThermalPrinter(Serial):
                 byt += pixels[i+j] << (7 - j)
             data.append(byt)
             
+        self.timeoutWait()
+        
         self.writeLine(data)
         
+        d=self.dotFeedTime
+        self.timeoutSet(d)
+   
     def printPixelArray(self,pixels):
         #self.reset()
         time.sleep(1)
@@ -100,10 +112,8 @@ class SimpleThermalPrinter(Serial):
 
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
-        self.timeoutWait()
         super(SimpleThermalPrinter, self).write(line)
-        d=self.dotFeedTime
-        self.timeoutSet(d)
+
         
     def close(self):
         self.setStatus(False)
