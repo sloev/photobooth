@@ -139,7 +139,7 @@ class ImageProcessor(object):
     def composeForPrinterReturnPixelArrays(self,imageDir,number):
         print("composing For Printer")
 
-        strip = Image.new('RGB', (384,384*(number+1)+(20*number+1)), (255,255,255)) 
+        strip = Image.new('RGB', (384,384*(number+1), (255,255,255)) 
 
         count=0
         pixels=[]
@@ -150,10 +150,10 @@ class ImageProcessor(object):
             print inFile
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
+            img_with_border = ImageOps.expand(img,border=5,fill='white')
+
             #pixels+=[self.rasterForPrinter(img)]
-            if count==0:
-                strip.paste(img,(0,count*384+10))
-            strip.paste(img,(0,count*384+20))
+            strip.paste(img,(0,count*384))
                 
 
             count+=1
