@@ -102,7 +102,6 @@ class SimpleThermalPrinter(Serial):
    
     def printPixelArray(self,pixels):
         #self.reset()
-        time.sleep(1)
         for u in range(3):
             for i in range(0,len(pixels),384):
                 self.writePixelLine(pixels[i:i+384])
