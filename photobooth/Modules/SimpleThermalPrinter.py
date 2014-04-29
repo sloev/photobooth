@@ -36,7 +36,7 @@ class SimpleThermalPrinter(Serial):
         self.dotFeedTime     =  0.025
 
         args = [ "/dev/ttyAMA0", baudrate ]
-        Serial.__init__(self, "/dev/ttyAMA0", baudrate,writeTimeout=None)
+        Serial.__init__(self, "/dev/ttyAMA0", baudrate)
         
         time.sleep(1)
         self.reset()
@@ -77,8 +77,8 @@ class SimpleThermalPrinter(Serial):
      
     def writePixelLine(self,pixels):#always takes a list of 384 pixels
         width=len(pixels)
-     #   if width>384:
-      #      width=384
+        if width>384:print "error:width>384"
+        
         data=[18,42,1,48]
         for i in range(0,width,8):
             byt=0
@@ -94,9 +94,7 @@ class SimpleThermalPrinter(Serial):
         for i in range(0,len(pixels),384):
             self.writePixelLine(pixels[i:i+384])
         print "printed an image, sleeping now"
-        time.sleep(1)
-        #self.feed()
-        time.sleep(1)
+        self.feed()
         print "woke up"
         
 
@@ -106,11 +104,7 @@ class SimpleThermalPrinter(Serial):
         super(SimpleThermalPrinter, self).write(line)
         d=self.BYTE_TIME*bytes.size+self.dotFeedTime+self.dotPrintTime*bytes.size
         self.timeoutSet(d)
-       # super(SimpleThermalPrinter, self).flushutput()
-
         
-    
-    
     def close(self):
         self.setStatus(False)
         super(SimpleThermalPrinter, self).flushOutput()
@@ -120,6 +114,7 @@ class SimpleThermalPrinter(Serial):
 
     # Waits (if necessary) for the prior task to complete.
     def timeoutWait(self):
+        print "waiting"
         while (time.time() - self.resumeTime) < 0: pass#original was pass
 
 
