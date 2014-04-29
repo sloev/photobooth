@@ -102,7 +102,7 @@ class SimpleThermalPrinter(Serial):
         line=''.join(chr(b) for b in bytes)
         self.timeoutWait()
         super(SimpleThermalPrinter, self).write(line)
-        d=self.BYTE_TIME*len(bytes)+self.dotFeedTime+self.dotPrintTime*len(bytes)
+        d=(self.dotFeedTime+self.dotPrintTime)
         self.timeoutSet(d)
         
     def close(self):
