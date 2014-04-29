@@ -40,7 +40,6 @@ class SimpleThermalPrinter(Serial):
         
         time.sleep(1)
         self.reset()
-        #time.sleep(1)
         
         #self.setControlParameters()
         #self.setDensity()
@@ -49,14 +48,15 @@ class SimpleThermalPrinter(Serial):
         #self.feed()
         
     def reset(self):
-        self.timeoutWait()
+        #self.timeoutWait()
         command=[12]#flush
         self.writeLine(command)
-
+        time.sleep(0.5)
 
         command=[27,64]
         self.writeLine(command)
-        self.timeoutSet(48*self.dotPrintTime)
+        #self.timeoutSet(48*self.dotPrintTime)
+        time.sleep(0.5)
 
 
     def feed(self,lines=1):
