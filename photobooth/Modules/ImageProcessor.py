@@ -136,7 +136,7 @@ class ImageProcessor(object):
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
 
-    def composeForPrinterReturnPixelArrays(self,imageDir):
+    def composeForPrinterReturnPixelArrays(self,imageDir,number):
         print("composing For Printer")
 
         #strip = Image.new('RGB', (384,384*4), (0,0,0)) 
@@ -145,7 +145,7 @@ class ImageProcessor(object):
         pixels=[]
         for inFile in sorted(glob.glob(os.path.join(imageDir, '*.JPG'))):
             '''change to amount of pictures including qr code'''
-            if count>2:
+            if count>number:
                 break
             print inFile
             img=Image.open(inFile)
