@@ -151,7 +151,10 @@ class ImageProcessor(object):
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
             #pixels+=[self.rasterForPrinter(img)]
+            if count==0:
+                strip.paste(img,(0,count*384+10))
             strip.paste(img,(0,count*384+20))
+                
 
             count+=1
         strip=ImageOps.grayscale(strip)
