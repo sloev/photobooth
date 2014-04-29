@@ -40,7 +40,7 @@ class SimpleThermalPrinter(Serial):
         
         time.sleep(1)
         self.reset()
-        time.sleep(1)
+        #time.sleep(1)
         
         #self.setControlParameters()
         #self.setDensity()
