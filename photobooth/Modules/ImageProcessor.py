@@ -155,6 +155,7 @@ class ImageProcessor(object):
 
             count+=1
         strip=ImageOps.grayscale(strip)
+        strip.save("strip.jpg")
         pixels+=[self.rasterForPrinter(strip)]
         return pixels
 
