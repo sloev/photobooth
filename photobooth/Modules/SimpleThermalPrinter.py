@@ -31,6 +31,9 @@ class SimpleThermalPrinter(Serial):
         baudrate = 19200
         self.BYTE_TIME =(11.0) / float(baudrate)
         self.LINE_TIME=self.BYTE_TIME*10
+        self.resumeTime      =  0.0
+        self.dotPrintTime    =  0.33
+        self.dotFeedTime     =  0.025
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate,writeTimeout=None)
@@ -84,7 +87,6 @@ class SimpleThermalPrinter(Serial):
             data.append(byt)
             
         self.writeLine(data)
-        time.sleep(self.BYTE_TIME*len(data))
         
     def printPixelArray(self,pixels):
         #self.reset()
@@ -100,7 +102,10 @@ class SimpleThermalPrinter(Serial):
 
     def writeLine(self, bytes):
         line=''.join(chr(b) for b in bytes)
+        self.timeoutWait()
         super(SimpleThermalPrinter, self).write(line)
+        d=self.BYTE_TIME*bytes.size+self.dotFeedTime+self.dotPrintTime*bytes.size
+        self.timeoutSet(d)
        # super(SimpleThermalPrinter, self).flushutput()
 
         
@@ -109,6 +114,15 @@ class SimpleThermalPrinter(Serial):
     def close(self):
         self.setStatus(False)
         super(SimpleThermalPrinter, self).flushOutput()
+        
+    def timeoutSet(self, x):
+        self.resumeTime = time.time() + x
+
+    # Waits (if necessary) for the prior task to complete.
+    def timeoutWait(self):
+        while (time.time() - self.resumeTime) < 0: pass#original was pass
+
+
           
 def main():
     #
