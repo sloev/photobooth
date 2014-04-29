@@ -150,7 +150,6 @@ class ImageProcessor(object):
             print inFile
             img=Image.open(inFile)
             img=self.resizeForPrinter(img)
-            img = ImageOps.expand(img,border=5,fill='white')
 
             #pixels+=[self.rasterForPrinter(img)]
             strip.paste(img,(0,count*384))
@@ -166,6 +165,7 @@ class ImageProcessor(object):
         width,height=img.size  
         if width>384:
             img=img.crop(((width/2)-(height/2),0,(width/2)+(height/2),height))
+            img = ImageOps.expand(img,border=5,fill='white')
             img=img.resize((384,384))
         return img
     
