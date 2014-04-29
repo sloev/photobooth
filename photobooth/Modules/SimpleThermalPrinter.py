@@ -56,7 +56,7 @@ class SimpleThermalPrinter(Serial):
 
         command=[27,64]
         self.writeLine(command)
-        self.timeoutSet(2*self.dotPrintTime)
+        self.timeoutSet(48*self.dotPrintTime)
 
 
     def feed(self,lines=1):
@@ -107,6 +107,7 @@ class SimpleThermalPrinter(Serial):
             self.writePixelLine(pixels[i:i+384])
         print "printed an image, sleeping now"
         self.feed()
+        self.reset()
         print "woke up"
         
 
