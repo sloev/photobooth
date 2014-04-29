@@ -110,9 +110,9 @@ class ImageProcessor(object):
         '''making a token for later deletion of image before upload'''
 
         tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
-        qr = QRCode(version=10, error_correction=ERROR_CORRECT_L)
-        qr.add_data(tokenString)
-        qr.make() # Generate the QRCode itself
+        qr = QRCode(version=None, error_correction=ERROR_CORRECT_H,border=0)
+        #qr.add_data(tokenString)
+        qr.make(tokenString,fit=True) # Generate the QRCode itself
 
         # im contains a PIL.Image.Image object
         im = qr.make_image()
