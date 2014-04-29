@@ -103,7 +103,7 @@ class SimpleThermalPrinter(Serial):
         self.timeoutWait()
         super(SimpleThermalPrinter, self).write(line)
         d=(self.dotFeedTime+self.dotPrintTime)
-        self.timeoutSet(d)
+        #self.timeoutSet(d)
         
     def close(self):
         self.setStatus(False)
