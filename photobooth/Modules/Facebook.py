@@ -16,11 +16,13 @@ class Facebook(object):
     '''
     
     def __init__(self,config):
-  
-        token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
-        self.facebook = GraphAPI(token[0])
-        print ("facebook token expires at "+str(token[1]))
-        print ("token:"+str(token[0]))
+        try:
+            token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
+            self.facebook = GraphAPI(token[0])
+            print ("facebook token expires at "+str(token[1]))
+            print ("token:"+str(token[0]))
+        except:
+            self.facebook=None
         
     def uploadImage(self,messageStr,imagePath):
         print("uploading to facebook")
