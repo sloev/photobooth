@@ -37,7 +37,7 @@ class Facebook(object):
                 break
             except:
                 print("facebook error, try #"+str(tries))
-                time.sleep(500)
+                time.sleep(0.1)
                 tries=tries+1
 
         print("finnished uploading to facebook\n")
