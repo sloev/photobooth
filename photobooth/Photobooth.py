@@ -109,6 +109,6 @@ def main():
     except KeyboardInterrupt:
         print("exiting")
         photobooth.stopShoot()
-
+        GPIO.cleanup()
 if __name__ == '__main__':
     main()
