@@ -11,15 +11,16 @@ from Modules.SimpleThermalPrinter import SimpleThermalPrinter
 from Modules.Picamera import Picamera
 import json,time,threading, sys, select
 import datetime
+import RPi.GPIO as GPIO
 
-
- 
 class Photobooth(object):
     '''
     classdocs
     '''
 
     def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(4,GPIO.IN,pull_up_down = GPIO.PUD_DOWN)
         '''
         Constructor
         '''
@@ -96,6 +97,10 @@ def main():
     try:
         while True:
             time.sleep(1)
+            if(GPIO.input(4)==0):
+                time.sleep(0.1)
+                if(GPIO.input(4)==0):
+                    photobooth.startShoot()
             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
                 c = sys.stdin.readline()
                 c=c[0:1]
