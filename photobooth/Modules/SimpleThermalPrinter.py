@@ -30,7 +30,7 @@ class SimpleThermalPrinter(Serial):
         Constructor
         '''
         baudrate = 19200
-        self.BYTE_TIME =(11.0) / float(baudrate)
+        self.BYTE_TIME =(12.0) / float(baudrate)
         self.LINE_TIME=self.BYTE_TIME*10
         self.resumeTime      =  0.0
         self.dotPrintTime    =  0.80#vigtigt
