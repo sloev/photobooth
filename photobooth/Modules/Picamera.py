@@ -5,45 +5,13 @@ Created on Apr 22, 2014
 '''
 
 import picamera
-from PIL import Image
+from Image
 import io
 import time
 
 import threading
 import datetime,os,time
 
-class Producer(threading.Thread):
-    
-    def __init__(self, e,q):
-        super(Producer, self).__init__()
-        print "Producer Started"
-        self.q = q
-        self.e=e
-    
-    def run(self):
-        for x in range(3):
-            print "making number:%d" ,x
-            self.q.put(x)
-            time.sleep(1)
-            if self.e.is_set():
-                break
-        print "producer done"
-        
-        
-        import io
-import time
-import picamera
-from PIL import Image
-
-# Create the in-memory stream
-stream = io.BytesIO()
-with picamera.PiCamera() as camera:
-    camera.start_preview()
-    time.sleep(2)
-    camera.capture(stream, format='jpeg')
-# "Rewind" the stream to the beginning so we can read its content
-stream.seek(0)
-image = Image.open(stream)
 
 class Picamera(object):
     '''
@@ -75,14 +43,17 @@ class Picamera(object):
         #mydir = os.path.join(self.current_dir, "pi3cs/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
         #os.makedirs(mydir)
         #os.chdir(mydir)
+        print "inside camera capture"
         images=[]
         
         for i in range(4):
+            print "making stream"
             stream = io.BytesIO()
 
             time.sleep(intervalSeconds)
 #            filename=str(i+1)+"image.JPG"
-            self.camera.capture(stream,format='jpeg')
+            #self.camera.capture(stream,format='jpeg')
+            self.camera.capture(stream, format='jpeg')
             stream.seek(0)
             images=images+[Image.open(stream)]
             print "image put in queue"
