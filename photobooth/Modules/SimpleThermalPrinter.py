@@ -44,8 +44,9 @@ class SimpleThermalPrinter(Serial):
         self.rasterToPrinterQueue=rasterToPrinterQueue
         self.quitEvent=quitEvent
         self.consumerThread=threading.Thread(target=self.consumer())
-        self.consumerThread.daemon=True
+        #self.consumerThread.daemon=True
         self.consumerThread.start()
+        print "printer made thread"
 
         
         #self.setControlParameters()
