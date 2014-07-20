@@ -62,7 +62,7 @@ class Picamera(object):
         self.quitEvent=quitEvent
         self.stream = io.BytesIO()
         time.sleep(2)
-        self.captureThread=threading.Thread(target=self.captureFourImages())
+        self.captureThread=threading.Thread(target=None)
         
     def isCaptureThreadRunning(self):
         return self.captureThread.isAlive()
