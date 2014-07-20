@@ -25,7 +25,7 @@ class Picamera(object):
         '''
         self.camera=picamera.PiCamera()
       #  self.camera.resolution=(800,600)
-        #self.current_dir=os.getcwd()
+        self.current_dir=os.getcwd()
         self.cameraToRasterQueue = cameraToRasterQueue
         self.quitEvent=quitEvent
         time.sleep(2)
