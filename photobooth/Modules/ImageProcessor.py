@@ -19,7 +19,7 @@ class ImageProcessor(object):
     '''
 
     
-    def __init__(self):
+    def __init__(self,quitEvent,cameraQueue,printerQueue):
         '''
         Constructor
         '''
@@ -43,6 +43,9 @@ class ImageProcessor(object):
                             "width":1600,
                             "overlay":Image.open(os.getcwd()+"/templates/facebookOverlay.png")
                             }
+        self.cameraQueue=cameraQueue
+        self.printerQueue=printerQueue
+        self.quitEvent=quitEvent
         
     def composeForTwitter(self,imagedir):
         print("composing for twitter")
@@ -135,7 +138,14 @@ class ImageProcessor(object):
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
-
+    
+    def consumerAndPixelProducer(self):
+        while not self.quitEvent.is_set():
+            image=self.cameraQueue.get()
+            if not image==None:
+                image=self.resizeForPrinter(image)
+                self.rasterForPrinter(image)
+                
     def composeForPrinterReturnPixelArrays(self,imageDir,number):
         print("composing For Printer")
 
@@ -230,12 +240,11 @@ class ImageProcessor(object):
                     pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
+            self.printerQueue.put(pixels[y*width:(y+1)*width])# todo find den ligef¿r tilf¿jede pixel linje :-)
 
-        print "finnished dithering, putting image"
         #newim = Image.new("L",img.size)
         #image.save("dithered.jpg")
         #newim.putdata(pixelArray)
-        return pixels
     
 def main():
     import os

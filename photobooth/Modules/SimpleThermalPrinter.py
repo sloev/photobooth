@@ -15,6 +15,7 @@ print line
 
 '''
 from serial import Serial
+import threading,Queue
 import time
 
 
@@ -24,7 +25,7 @@ class SimpleThermalPrinter(Serial):
     '''
 
 
-    def __init__(self):
+    def __init__(self,quitEvent,rasterToPrinterQueue):
         '''
         Constructor
         '''
@@ -32,20 +33,31 @@ class SimpleThermalPrinter(Serial):
         self.BYTE_TIME =(11.0) / float(baudrate)
         self.LINE_TIME=self.BYTE_TIME*10
         self.resumeTime      =  0.0
-        self.dotPrintTime    =  0.80
-        self.dotFeedTime     =  0.055
+        self.dotPrintTime    =  0.80#vigtigt
+        self.dotFeedTime     =  0.060
 
         args = [ "/dev/ttyAMA0", baudrate ]
         Serial.__init__(self, "/dev/ttyAMA0", baudrate)
         
         time.sleep(1)
         self.reset()
+        self.rasterToPrinterQueue=rasterToPrinterQueue
+        self.quitEvent=quitEvent
+        self.consumerThread=threading.Thread(target=self.consumer())
+        self.consumerThread.daemon=True
+        self.consumerThread.start()
+
         
         #self.setControlParameters()
         #self.setDensity()
         #self.setStatus()
         #self.reverseFlip()
         #self.feed()
+    def consumer(self):
+        while not self.quitEvent.is_set():
+            pixelLine=self.rasterToPrinterQueue.get()
+            if not pixelLine==None:
+                self.writePixelLine(pixelLine[0:384])                
         
     def reset(self):
         #self.timeoutWait()
