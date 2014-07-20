@@ -84,12 +84,14 @@ class Picamera(object):
             self.camera.capture(stream,format='jpeg')
             self.stream.seek(0)
             images=images+[Image.open(stream)]
-            self.cameraToRasterQueue.put(images[i])
+            print "image put in queue"
+            if not i%2: #only sending even number to queue
+                self.cameraToRasterQueue.put(images[i])
             if self.quitEvent.is_set():
                 break
         mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
         os.makedirs(mydir)
         os.chdir(mydir)
-
+        print("saving images")
         for i in range(images.size()):
             images[i].save(str(i)+".jpg")

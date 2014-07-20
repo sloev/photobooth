@@ -240,7 +240,7 @@ class ImageProcessor(object):
                     pixels[nxy[0]+nxy[1]*width]=(pixelArray[nxy]+err)!=255
 
                     pixelArray[nxy]=pixelArray[nxy]+err
-            self.printerQueue.put(pixels[y*width:(y+1)*width])# todo find den ligef¿r tilf¿jede pixel linje :-)
+            self.printerQueue.put(pixels[y*width:(y+1)*width])#
 
         #newim = Image.new("L",img.size)
         #image.save("dithered.jpg")
