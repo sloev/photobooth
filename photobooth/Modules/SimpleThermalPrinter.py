@@ -46,10 +46,10 @@ class SimpleThermalPrinter(Serial):
         self.rasterToPrinterQueue=rasterToPrinterQueue
         self.quitEvent=quitEvent
         print "making print consumer thread"
-        self.consumerThread=threading.Thread(target=self.consumer())
+        self.consumerThread=threading.Thread(target=self.consumer)
         #self.consumerThread.daemon=True
         print "starting print consumer thread"
-        #self.consumerThread.start()
+        self.consumerThread.start()
         print "printer made thread"
 
         
@@ -60,6 +60,7 @@ class SimpleThermalPrinter(Serial):
         #self.feed()
     def consumer(self):
         print "print consumer running"
+
         while not self.quitEvent.is_set():
             pixelLine=self.rasterToPrinterQueue.get()
             if not pixelLine==None:
