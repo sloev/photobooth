@@ -5,7 +5,7 @@ Created on Apr 22, 2014
 '''
 
 import picamera
-from Image
+import Image
 import io
 import time
 
