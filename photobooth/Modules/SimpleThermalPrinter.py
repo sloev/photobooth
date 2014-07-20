@@ -143,7 +143,9 @@ class SimpleThermalPrinter(Serial):
           
 def main():
     #
-    printer=SimpleThermalPrinter()  
+        rasterToPrinterQueue = Queue.Queue()
+        quitEvent = threading.Event()
+    printer=SimpleThermalPrinter(quitEvent,rasterToPrinterQueue)  
     
     import sys,select,Image,ImageOps
     from ImageProcessor import ImageProcessor
