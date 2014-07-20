@@ -61,6 +61,10 @@ class Picamera(object):
                 self.cameraToRasterQueue.put(images[i])
             if self.quitEvent.is_set():
                 break
+        whitespace = Image.new('RGB', (384,150), (255,255,255))
+        self.cameraToRasterQueue.put(whitespace)
+
+
         mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
         os.makedirs(mydir)
         os.chdir(mydir)
