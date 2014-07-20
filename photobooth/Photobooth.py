@@ -47,14 +47,16 @@ class Photobooth(object):
         self.cameraToRasterQueue = Queue.Queue()
         self.rasterToPrinterQueue = Queue.Queue()
         self.quitEvent = threading.Event()
+        print "made events and queues"
         
+        print "init imageprocessor"
         self.imageProcessor=ImageProcessor(self.quitEvent,self.cameraToRasterQueue,self.rasterToPrinterQueue)
-
+        print "init picamera"
         self.picamera=Picamera(self.quitEvent,self.cameraToRasterQueue)
+        print "init printer"
         self.printer=SimpleThermalPrinter(self.quitEvent,self.rasterToPrinterQueue)
         
         '''state thread'''
-        self.stateThread=threading.Thread()
 
     def startShoot(self):
         if not self.picamera.isCaptureThreadRunning() and not self.cameraToRasterQueue.empty() and not self.rasterToPrinterQueue.empty():
