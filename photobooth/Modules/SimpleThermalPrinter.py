@@ -144,7 +144,7 @@ class SimpleThermalPrinter(Serial):
     # Waits (if necessary) for the prior task to complete.
     def timeoutWait(self):
         #print "waiting"
-        while (time.time() - self.resumeTime) < 0: pass#original was pass
+        while (not self.quitEvent.is_set() and time.time() - self.resumeTime) < 0: pass#original was pass
 
 
           
