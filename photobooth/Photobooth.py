@@ -59,7 +59,7 @@ class Photobooth(object):
         '''state thread'''
 
     def startShoot(self):
-        if self.cameraToRasterQueue.empty() and self.rasterToPrinterQueue.empty():
+        if not self.picamera.isCaptureThreadRunning() and self.cameraToRasterQueue.empty() and self.rasterToPrinterQueue.empty():
             print "now shooting"
             self.shoot()
         else:
