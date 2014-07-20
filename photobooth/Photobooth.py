@@ -74,7 +74,7 @@ class Photobooth(object):
     def shoot(self):
         print "shooting"
         self.picamera.captureFourImagesThreaded()
-
+        print "told camera to shoot"
         #facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
         #twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
         

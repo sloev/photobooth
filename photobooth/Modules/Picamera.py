@@ -60,7 +60,6 @@ class Picamera(object):
         #self.current_dir=os.getcwd()
         self.cameraToRasterQueue = cameraToRasterQueue
         self.quitEvent=quitEvent
-        self.stream = io.BytesIO()
         time.sleep(2)
         self.captureThread=threading.Thread()
         
@@ -79,10 +78,12 @@ class Picamera(object):
         images=[]
         
         for i in range(4):
+            stream = io.BytesIO()
+
             time.sleep(intervalSeconds)
 #            filename=str(i+1)+"image.JPG"
             self.camera.capture(stream,format='jpeg')
-            self.stream.seek(0)
+            stream.seek(0)
             images=images+[Image.open(stream)]
             print "image put in queue"
             if not i%2: #only sending even number to queue
