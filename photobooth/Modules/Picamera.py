@@ -68,7 +68,7 @@ class Picamera(object):
         return self.captureThread.isAlive()
         
     def captureFourImagesThreaded(self,intervalSeconds=1):
-        self.captureThread=threading.Thread(target=self.captureFourImages(), args=(intervalSeconds,))
+        self.captureThread=threading.Thread(target=self.captureFourImages, args=(intervalSeconds,))
         #self.captureThread.daemon=True
         self.captureThread.start()
 
