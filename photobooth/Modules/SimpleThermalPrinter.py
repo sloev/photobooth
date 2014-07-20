@@ -47,7 +47,7 @@ class SimpleThermalPrinter(Serial):
         self.quitEvent=quitEvent
         print "making print consumer thread"
         self.consumerThread=threading.Thread(target=self.consumer)
-        #self.consumerThread.daemon=True
+        self.consumerThread.daemon=True
         print "starting print consumer thread"
         self.consumerThread.start()
         print "printer made thread"

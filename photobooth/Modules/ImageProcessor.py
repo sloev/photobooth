@@ -11,7 +11,7 @@ from Facebook import Facebook
 import datetime
 import socket
 from qrcode import *
-
+import threading
              
 class ImageProcessor(object):
     '''
@@ -46,6 +46,13 @@ class ImageProcessor(object):
         self.cameraQueue=cameraQueue
         self.printerQueue=printerQueue
         self.quitEvent=quitEvent
+        
+        print "making image... consumer thread"
+        self.consumerThread=threading.Thread(target=self.consumerAndPixelProducer)
+        self.consumerThread.daemon=True
+        print "starting image... consumer thread"
+        self.consumerThread.start()
+        print "imagep... made thread"
         
     def composeForTwitter(self,imagedir):
         print("composing for twitter")

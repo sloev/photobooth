@@ -59,7 +59,8 @@ class Photobooth(object):
         '''state thread'''
 
     def startShoot(self):
-        if not self.picamera.isCaptureThreadRunning() and not self.cameraToRasterQueue.empty() and not self.rasterToPrinterQueue.empty():
+        if not self.cameraToRasterQueue.empty() and not self.rasterToPrinterQueue.empty():
+            print "now shooting"
             self.shoot()
         else:
             print("busy shooting")
@@ -71,6 +72,7 @@ class Photobooth(object):
         #self.stateThread.join()
 
     def shoot(self):
+        print "shooting"
         self.picamera.captureFourImagesThreaded()
 
         #facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
