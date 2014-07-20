@@ -55,6 +55,7 @@ class SimpleThermalPrinter(Serial):
         #self.reverseFlip()
         #self.feed()
     def consumer(self):
+
         while not self.quitEvent.is_set():
             pixelLine=self.rasterToPrinterQueue.get()
             if not pixelLine==None:
@@ -143,8 +144,8 @@ class SimpleThermalPrinter(Serial):
           
 def main():
     #
-        rasterToPrinterQueue = Queue.Queue()
-        quitEvent = threading.Event()
+    rasterToPrinterQueue = Queue.Queue()
+    quitEvent = threading.Event()
     printer=SimpleThermalPrinter(quitEvent,rasterToPrinterQueue)  
     
     import sys,select,Image,ImageOps
