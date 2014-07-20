@@ -37,14 +37,18 @@ class SimpleThermalPrinter(Serial):
         self.dotFeedTime     =  0.060
 
         args = [ "/dev/ttyAMA0", baudrate ]
+        print "initing printer"
         Serial.__init__(self, "/dev/ttyAMA0", baudrate)
         
         time.sleep(1)
         self.reset()
+        print "setting queues"
         self.rasterToPrinterQueue=rasterToPrinterQueue
         self.quitEvent=quitEvent
+        print "making print consumer thread"
         self.consumerThread=threading.Thread(target=self.consumer())
         #self.consumerThread.daemon=True
+        print "starting print consumer thread"
         self.consumerThread.start()
         print "printer made thread"
 
@@ -55,11 +59,12 @@ class SimpleThermalPrinter(Serial):
         #self.reverseFlip()
         #self.feed()
     def consumer(self):
-
+        print "print consumer running"
         while not self.quitEvent.is_set():
             pixelLine=self.rasterToPrinterQueue.get()
             if not pixelLine==None:
-                self.writePixelLine(pixelLine[0:384])                
+                self.writePixelLine(pixelLine[0:384])       
+        print "print consumer dying"         
         
     def reset(self):
         #self.timeoutWait()
