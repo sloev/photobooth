@@ -65,5 +65,5 @@ class Picamera(object):
         os.makedirs(mydir)
         os.chdir(mydir)
         print("saving images")
-        for i in range(images.size()):
+        for i in range(len(images)):
             images[i].save(str(i)+".jpg")
