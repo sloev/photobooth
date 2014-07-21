@@ -116,7 +116,7 @@ class Photobooth(object):
 
         
 def main():
-    time.sleep(10)
+    time.sleep(1)
     photobooth=Photobooth()
     print("press s to shoot")
     
