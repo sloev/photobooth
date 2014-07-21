@@ -24,11 +24,11 @@ class ImageProcessor(object):
         Constructor
         '''
         '''getting ip'''
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("gmail.com",80))
-        self.ip=s.getsockname()[0]
+       # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #s.connect(("gmail.com",80))
+        self.ip=None#s.getsockname()[0]
         print("ip is:"+str(self.ip))
-        s.close()
+       # s.close()
         '''got ip'''
         
         self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
@@ -119,7 +119,8 @@ class ImageProcessor(object):
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         '''making a token for later deletion of image before upload'''
 
-        tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
+       # tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
+        tokenString="http://:8080?stringToken="+dateString.encode('base64')
         qr = QRCode(version=None, error_correction=ERROR_CORRECT_H,border=0)
         qr.add_data(tokenString)
         qr.make(fit=True) # Generate the QRCode itself
