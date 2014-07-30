@@ -24,6 +24,7 @@ class ImageProcessor(object):
         Constructor
         '''
         '''getting ip'''
+        self.grey=False
        # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("gmail.com",80))
         self.ip=None#s.getsockname()[0]
@@ -33,6 +34,10 @@ class ImageProcessor(object):
         
        # self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
         self.outgoingPath="/tmp/photobooth/outgoing/"
+        if not os.path.isdir(self.outgoingPath[:len(self.outgoingPath)-1]):
+            #os.mkdir("/tmp/photobooth")
+            os.mkdir("/tmp/photobooth/outgoing")
+
 
         self.twitterLayout={
                             "photoDim":750,
@@ -106,7 +111,8 @@ class ImageProcessor(object):
             img=img.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
             img=img.resize((dim-10,dim-10))
             #img = ImageOps.autocontrast(img, cutoff=2)
-            img=ImageOps.grayscale(img)
+            if self.grey:
+                img=ImageOps.grayscale(img)
             
             strip.paste(img,(posX,5))
             count=count+1
@@ -138,7 +144,8 @@ class ImageProcessor(object):
             img=img.crop(((bbox[2]/2)-(bbox[3]/2),0,(bbox[2]/2)+(bbox[3]/2),bbox[3]))
             img=img.resize((dim-10,dim-10))
             #img = ImageOps.autocontrast(img, cutoff=2)
-            img=ImageOps.grayscale(img)
+            if self.grey:
+                img=ImageOps.grayscale(img)
             strip.paste(img,(posX,posY))
             count=count+1        
         overlay=self.facebookLayout["overlay"]
@@ -286,7 +293,7 @@ class ImageProcessor(object):
         #newim.putdata(pixelArray)
     
 def main():
-    import os,Queue,time,Image
+    import os,Queue,time,Image,sys, select
     print("started")
 
     images = []
@@ -298,7 +305,6 @@ def main():
     cameraToRasterQueue = Queue.Queue()
     rasterToPrinterQueue = Queue.Queue()
     cameraToSocialPreprocessorQueue = Queue.Queue()
-    cameraToSocialPreprocessorQueue.put(images)
     quitEvent = threading.Event()
     imageProcessor=ImageProcessor(
                                   quitEvent,
@@ -309,7 +315,12 @@ def main():
 
     try:
         while True:
-            time.sleep(1)
+            time.sleep(0.2)
+            while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+                c = sys.stdin.readline()
+                c=c[0:1]
+                if(c=='s'): 
+                    cameraToSocialPreprocessorQueue.put(images)
     except KeyboardInterrupt:
         print("exiting")
         pass
