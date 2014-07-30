@@ -109,6 +109,7 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         up.stopAll()
+    print "exited"
         
 if __name__ == '__main__':
     main()
