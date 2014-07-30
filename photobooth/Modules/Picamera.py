@@ -19,7 +19,7 @@ class Picamera(object):
     '''
 
 
-    def __init__(self,quitEvent,cameraToRasterQueue):
+    def __init__(self,quitEvent,cameraToRasterQueue,socialPreprocessorQueue):
         '''
         Constructor
         '''
@@ -27,6 +27,8 @@ class Picamera(object):
       #  self.camera.resolution=(800,600)
         self.current_dir=os.getcwd()
         self.cameraToRasterQueue = cameraToRasterQueue
+        self.socialPreprocessorQueue=socialPreprocessorQueue
+        
         self.quitEvent=quitEvent
         time.sleep(2)
         self.captureThread=threading.Thread()
@@ -63,11 +65,12 @@ class Picamera(object):
                 break
         whitespace = Image.new('RGB', (384,180), (255,255,255))
         self.cameraToRasterQueue.put(whitespace)
+        
+        self.socialPreprocessorQueue.put(images)
 
-
-        mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-        os.makedirs(mydir)
-        os.chdir(mydir)
-        print("saving images")
-        for i in range(len(images)):
-            images[i].save(str(i)+".jpg")
+        #mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+        #os.makedirs(mydir)
+        #os.chdir(mydir)
+        #print("saving images")
+        #for i in range(len(images)):
+        #    images[i].save(str(i)+".jpg")

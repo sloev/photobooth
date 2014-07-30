@@ -19,7 +19,7 @@ class ImageProcessor(object):
     '''
 
     
-    def __init__(self,quitEvent,cameraQueue,printerQueue):
+    def __init__(self,quitEvent,cameraQueue,printerQueue,socialPreprocessorQueue):
         '''
         Constructor
         '''
@@ -45,6 +45,8 @@ class ImageProcessor(object):
                             }
         self.cameraQueue=cameraQueue
         self.printerQueue=printerQueue
+        self.socialPreprocessorQueue=socialPreprocessorQueue
+        
         self.quitEvent=quitEvent
         
         print "making image... consumer thread"
@@ -54,15 +56,48 @@ class ImageProcessor(object):
         self.consumerThread.start()
         print "imagep... made thread"
         
-    def composeForTwitter(self,imagedir):
+        
+        print "making social... consumer thread"
+        self.socialConsumerThread=threading.Thread(target=self.consumerAndSocialProducer)
+        self.socialConsumerThread.daemon=True
+        print "starting social... consumer thread"
+        self.socialConsumerThread.start()
+        print "social... made thread"
+        
+    def consumerAndSocialProducer(self):
+        while not self.quitEvent.is_set():
+            images=self.socialPreprocessorQueue.get()
+            if not images == None:
+                facebookImageAndString=self.imageProcessor.composeForFacebook(images)
+                twitterImageAndString=self.imageProcessor.composeForTwitter(images)
+        
+                dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        
+                token=self.imageProcessor.saveImageToOutgoing(
+                                                              dateString,
+                                                              [
+                                                               facebookImageAndString,
+                                                               twitterImageAndString
+                                                              ],dir)
+                        
+    
+    def consumerAndPixelProducer(self):
+        while not self.quitEvent.is_set():
+            image=self.cameraQueue.get()
+            if not image==None:
+                image=self.resizeForPrinter(image)
+                self.rasterForPrinter(image)   
+                 
+    def composeForTwitter(self,images):
         print("composing for twitter")
         strip = Image.new('RGB', (self.twitterLayout["width"], self.twitterLayout["photoDim"]), (0,0,0)) 
         count=0
         dim=self.twitterLayout["photoDim"]
-        for inFile in glob.glob(os.path.join(imagedir, '*.JPG')):
+        #for inFile in glob.glob(os.path.join(imagedir, '*.JPG')):
+        for img in images:
             if count>1: break
-            print("\t"+str(inFile))
-            img=Image.open(inFile)
+            #print("\t"+str(inFile))
+            #img=Image.open(inFile)
             posX=5
             if count>0:posX=855
             posY=dim/2
@@ -85,16 +120,17 @@ class ImageProcessor(object):
         print("\n")
         return [strip,"twitter"]
     
-    def composeForFacebook(self,imageDir):
+    def composeForFacebook(self,images):
         print("composing for facebook")
         strip = Image.new('RGB', (self.facebookLayout["width"], self.facebookLayout["width"]), (0,0,0)) 
         count=0
         dim=self.facebookLayout["photoDim"]
         positions={0:[5,5],1:[dim,5],2:[5,dim],3:[dim,dim]}
-        for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
+        #for inFile in glob.glob(os.path.join(imageDir, '*.JPG')):
+        for img in images:
             if count>3:break
-            print("\t"+str(inFile))
-            img=Image.open(inFile)
+           # print("\t"+str(inFile))
+            #img=Image.open(inFile)
             
             posX,posY=positions[count]
             bbox=img.getbbox()
@@ -115,16 +151,16 @@ class ImageProcessor(object):
         return [strip,"facebook"]
         #return path
     
-    def saveImageToOutgoing(self,dateString,imageServicenameArray,qrdir):
+    def saveImageToOutgoing(self,dateString,imageServicenameArray):#,qrdir):
         #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         '''making a token for later deletion of image before upload'''
 
-       # tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
-        tokenString="http://:8080?stringToken="+dateString.encode('base64')
+        #tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
+        tokenString="lolcat"
+        #tokenString="http://:8080?stringToken="+dateString.encode('base64')
         qr = QRCode(version=None, error_correction=ERROR_CORRECT_H,border=0)
         qr.add_data(tokenString)
-        qr.make(fit=True) # Generate the QRCode itself
-
+        qr.make(fit=True) # Generate the QRCod#e itself
         # im contains a PIL.Image.Image object
         im = qr.make_image()
 
@@ -135,24 +171,19 @@ class ImageProcessor(object):
             pathPNG=path+".PNG"
             pathDone=path+".done"
             pathQr=path+".qr.png"
-            #pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
+            pathDone=os.path.join(self.outgoingPath,dateString+'_'+serviceName+'.done')#used as kind of atomic stuff
             image.save(pathPNG, 'PNG')
             with open(pathDone, 'w') as doneFile:
                 doneFile.write('done')
             # To save it
-            path2=os.path.join(qrdir,"0.JPG")
-            im.save(path2)
+            #path2=os.path.join(qrdir,"0.JPG")
+            #im.save(path2)
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
         return tokenString
     
-    def consumerAndPixelProducer(self):
-        while not self.quitEvent.is_set():
-            image=self.cameraQueue.get()
-            if not image==None:
-                image=self.resizeForPrinter(image)
-                self.rasterForPrinter(image)
+
                 
     def composeForPrinterReturnPixelArrays(self,imageDir,number):
         print("composing For Printer")

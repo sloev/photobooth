@@ -48,15 +48,17 @@ class Photobooth(object):
 
         self.cameraToRasterQueue = Queue.Queue()
         self.rasterToPrinterQueue = Queue.Queue()
+        self.cameraToSocialPreprocessorQueue = Queue.Queue()
+        
         self.quitEvent = threading.Event()
         print "made events and queues"
         
-        print "init imageprocessor"
-        self.imageProcessor=ImageProcessor(self.quitEvent,self.cameraToRasterQueue,self.rasterToPrinterQueue)
+        print "init imageprocessor and social preprocessor"
+        self.imageProcessor=ImageProcessor( self.quitEvent, self.cameraToRasterQueue, self.rasterToPrinterQueue, self.cameraToSocialPreprocessorQueue)
         print "init picamera"
-        self.picamera=Picamera(self.quitEvent,self.cameraToRasterQueue)
+        self.picamera=Picamera( self.quitEvent, self.cameraToRasterQueue,self.cameraToSocialPreprocessorQueue)
         print "init printer"
-        self.printer=SimpleThermalPrinter(self.quitEvent,self.rasterToPrinterQueue)
+        self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
         
         '''state thread'''
 
@@ -71,12 +73,14 @@ class Photobooth(object):
         self.quitEvent.set()
         self.cameraToRasterQueue.put(None)
         self.rasterToPrinterQueue.put(None)
+        self.cameraToSocialPreprocessorQueue.put(None)
         #self.stateThread.join()
 
     def shoot(self):
         print "shooting"
         self.picamera.captureFourImagesThreaded()
         print "told camera to shoot"
+        
         #facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
         #twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
         
@@ -92,7 +96,6 @@ class Photobooth(object):
         #pixels=self.imageProcessor.composeForPrinterReturnPixelArrays(dir,2)
         #for pixelarray in pixels:
          #   self.printer.printPixelArray(pixelarray)
-        
         
         '''chdk shooting and downloading'''
         #photoDir=self.camera.captureReturnDir()
