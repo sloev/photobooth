@@ -40,8 +40,9 @@ class UploadServer(object):
         self.facebookMessage=config["facebook"]["message"]
             
             
-        self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
-        
+        #self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
+        self.outgoingPath="/tmp/photobooth/outgoing/"
+
         self.scheduler=sched.scheduler(time.time,time.sleep)
         self.scheduler.enter(2,1,self.upload,())
         

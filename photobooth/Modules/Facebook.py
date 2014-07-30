@@ -17,10 +17,11 @@ class Facebook(object):
     
     def __init__(self,config):
         try:
-            token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
-            self.facebook = GraphAPI(token[0])
-            print ("facebook token expires at "+str(token[1]))
-            print ("token:"+str(token[0]))
+            #token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
+            #self.facebook = GraphAPI(token[0])
+            self.facebook = GraphAPI(config["token"])
+            #print ("facebook token expires at "+str(token[1]))
+            #print ("token:"+str(token[0]))
         except:
             self.facebook=None
         

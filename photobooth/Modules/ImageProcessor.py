@@ -31,7 +31,8 @@ class ImageProcessor(object):
        # s.close()
         '''got ip'''
         
-        self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
+       # self.outgoingPath=os.path.join(os.getcwd()+"/outgoing/")
+        self.outgoingPath="/tmp/photobooth/outgoing/"
 
         self.twitterLayout={
                             "photoDim":750,
@@ -68,17 +69,17 @@ class ImageProcessor(object):
         while not self.quitEvent.is_set():
             images=self.socialPreprocessorQueue.get()
             if not images == None:
-                facebookImageAndString=self.imageProcessor.composeForFacebook(images)
-                twitterImageAndString=self.imageProcessor.composeForTwitter(images)
+                facebookImageAndString=self.composeForFacebook(images)
+                twitterImageAndString=self.composeForTwitter(images)
         
                 dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         
-                token=self.imageProcessor.saveImageToOutgoing(
+                self.saveImageToOutgoing(
                                                               dateString,
                                                               [
                                                                facebookImageAndString,
                                                                twitterImageAndString
-                                                              ],dir)
+                                                              ])
                         
     
     def consumerAndPixelProducer(self):
@@ -152,11 +153,11 @@ class ImageProcessor(object):
         #return path
     
     def saveImageToOutgoing(self,dateString,imageServicenameArray):#,qrdir):
-        #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+        dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
         '''making a token for later deletion of image before upload'''
 
         #tokenString="http://"+self.ip+":8080?stringToken="+dateString.encode('base64')
-        tokenString="lolcat"
+        tokenString=dateString.encode('base64')
         #tokenString="http://:8080?stringToken="+dateString.encode('base64')
         qr = QRCode(version=None, error_correction=ERROR_CORRECT_H,border=0)
         qr.add_data(tokenString)
@@ -181,7 +182,7 @@ class ImageProcessor(object):
             im.save(pathQr)
 
         print "token is dateString:"+dateString+"\nencoded to:"+tokenString
-        return tokenString
+        #return tokenString
     
 
                 
@@ -202,8 +203,7 @@ class ImageProcessor(object):
 
             #pixels+=[self.rasterForPrinter(img)]
             strip.paste(img,(0,(count*384)+10))
-                
-
+            
             count+=1
         strip=ImageOps.grayscale(strip)
         #strip.save("strip.jpg")
@@ -286,31 +286,38 @@ class ImageProcessor(object):
         #newim.putdata(pixelArray)
     
 def main():
-    import os
+    import os,Queue,time,Image
     print("started")
-    message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
-    ip=ImageProcessor()
-    facebookImageAndString=ip.composeForFacebook(os.getcwd()+"/pics")
-    twitterImageAndString=ip.composeForTwitter(os.getcwd()+"/pics")
+    images = []
+    images += [Image.new('RGB', (1280,720), (0,255,255))]
+    images += [Image.new('RGB', (1280,720), (255,0,255))]
+    images += [Image.new('RGB', (1280,720), (255,255,0))]
+    images += [Image.new('RGB', (1280,720), (0,255,0))]
     
-    dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+    cameraToRasterQueue = Queue.Queue()
+    rasterToPrinterQueue = Queue.Queue()
+    cameraToSocialPreprocessorQueue = Queue.Queue()
+    cameraToSocialPreprocessorQueue.put(images)
+    quitEvent = threading.Event()
+    imageProcessor=ImageProcessor(
+                                  quitEvent,
+                                  cameraToRasterQueue, 
+                                  rasterToPrinterQueue, 
+                                  cameraToSocialPreprocessorQueue
+                                  )
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("exiting")
+        pass
     
-    token=ip.saveImageToOutgoing(
-                           dateString,
-                           [
-                            facebookImageAndString,
-                            twitterImageAndString
-                            ])
-    with open('apiconfigs.txt', 'rb') as fp:
-        import json
-        config = json.load(fp)
-        #twitter=Twitter(config["twitter"])
-        #twitter.uploadImage(message,twitterPath)
-        #facebook=Facebook(config["facebook"])
-        #facebook.uploadImage(message, facebookPath)
-        
-    ip.composeForPrinter(os.getcwd())
-    
+    quitEvent.set()
+    cameraToRasterQueue.put(None)        
+    rasterToPrinterQueue.put(None)
+    cameraToSocialPreprocessorQueue.put(None)
+                                    
 if __name__ == '__main__':
     main()
