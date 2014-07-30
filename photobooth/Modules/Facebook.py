@@ -20,7 +20,7 @@ class Facebook(object):
         try:
             #token=facepy.utils.get_extended_access_token(config["token"],config['app_id'],config['app_secret']) 
             #self.facebook = GraphAPI(token[0])
-            me=self.facebook.get('me/accounts')
+            me=self.facebook.get('me')
             print(json.dumps(me, indent=4))
 
             #print ("token:"+str(token[0]))
@@ -32,8 +32,8 @@ class Facebook(object):
         tries=0
         while(tries<5):
             try:
-                self.facebook.post(
-                                   path = 'Loppenbooth/photos',
+                print self.facebook.post(
+                                   path = 'me/photos',
                                    source = open(imagePath),
                                    message=messageStr
                                    )

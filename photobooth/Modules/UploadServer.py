@@ -72,11 +72,11 @@ class UploadServer(object):
                 serviceName=fileName[17:len(fileName)-5]
                 if(serviceName=="twitter"):
                     print "twitter done file found \nnow uploading"
-                    self.twitter.uploadImage(self.twitterMessage+" "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
+                    self.twitter.uploadImage(self.twitterMessage+"\ntimestamp: "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
                     print "done"
                 elif(serviceName=="facebook"):
                     print "facebook done file found\nnow uploading"
-                    self.facebook.uploadImage(self.facebookMessage+" "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
+                    self.facebook.uploadImage(self.facebookMessage+"\ntimestamp: "+currentTimeString,targetFile[:len(targetFile)-5]+".PNG")
                     print "done"
                 '''deleting'''
                 delete=True
