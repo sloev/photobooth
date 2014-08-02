@@ -36,7 +36,9 @@ class ImageProcessor(object):
         self.outgoingPath="/tmp/photobooth/outgoing/"
         if not os.path.isdir(self.outgoingPath[:len(self.outgoingPath)-1]):
             #os.mkdir("/tmp/photobooth")
+            os.mkdir("/tmp/photobooth")
             os.mkdir("/tmp/photobooth/outgoing")
+            
 
 
         self.twitterLayout={
