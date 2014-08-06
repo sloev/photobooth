@@ -37,7 +37,7 @@ def main():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(4, GPIO.OUT) #set pin 21 to output
 
-    p = GPIO.PWM(4,0.1)        #set the PWM on pin 21 to 50%
+    p = GPIO.PWM(4,1)        #set the PWM on pin 21 to 50%
 
     p.start(0)    
     
