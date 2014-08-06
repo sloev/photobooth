@@ -34,10 +34,10 @@ class LedDriver(object):
         self.currentDutyCycle=dutyCycle
 
 def main():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(21, GPIO.OUT) #set pin 21 to output
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(2, GPIO.OUT) #set pin 21 to output
 
-    p = GPIO.PWM(21,0.1)        #set the PWM on pin 21 to 50%
+    p = GPIO.PWM(2,0.1)        #set the PWM on pin 21 to 50%
 
     p.start(0)    
     
