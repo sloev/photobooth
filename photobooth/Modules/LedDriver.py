@@ -39,7 +39,7 @@ def main():
 
     p = GPIO.PWM(2,0)        #set the PWM on pin 21 to 50%
 
-    p.start(0) #I don’t remember what this does but trust me, you need it.
+    p.start(0)    
     
     ledDriver=LedDriver(p)
     ledDriver.fadeUp()
