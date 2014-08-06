@@ -35,9 +35,9 @@ class LedDriver(object):
 
 def main():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(8, GPIO.OUT) #set pin 21 to output
+    GPIO.setup(8, GPIO.OUT) 
 
-    p = GPIO.PWM(8,1)        #set the PWM on pin 21 to 50%
+    p = GPIO.PWM(8,1)        
 
     p.start(0)    
     
@@ -45,6 +45,7 @@ def main():
     ledDriver.fadeUp()
     time.sleep(5)
     ledDriver.fadeDown()
+    time.sleep(5)
     p.stop()
     GPIO.cleanup()
 
