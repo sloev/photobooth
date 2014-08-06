@@ -35,9 +35,9 @@ class LedDriver(object):
 
 def main():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(8, GPIO.OUT) 
+    GPIO.setup(2, GPIO.OUT) 
 
-    p = GPIO.PWM(8,1)        
+    p = GPIO.PWM(2,1)        
 
     p.start(0)    
     
