@@ -15,10 +15,10 @@ class LedDriver(object):
     def __init__(self,pwmLed):
         self.pwmLed=pwmLed
         self.currentDutyCycle=0
-        self.pwmThread=threading.Thread(target=self.fade, args=(0,))
+        self.pwmThread=threading.Thread(target=self.fade, args=(1,))
 
     def fadeUp(self):
-        self.pwmThread=threading.Thread(target=self.fade, args=(0,))
+        self.pwmThread=threading.Thread(target=self.fade, args=(1,))
         self.pwmThread.daemon=True
         self.pwmThread.start()
     
@@ -35,9 +35,9 @@ class LedDriver(object):
 
 def main():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(4, GPIO.OUT) #set pin 21 to output
+    GPIO.setup(8, GPIO.OUT) #set pin 21 to output
 
-    p = GPIO.PWM(4,50)        #set the PWM on pin 21 to 50%
+    p = GPIO.PWM(8,1)        #set the PWM on pin 21 to 50%
 
     p.start(0)    
     
