@@ -61,7 +61,7 @@ class Photobooth(object):
         print "init printer"
         self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
         GPIO.setup(18,GPIO.OUT)
-        pwmLed=GPIO.PWM(18,200)
+        pwmLed=GPIO.PWM(18,2000)
         self.ledDriver=LedDriver(pwmLed,self.rasterToPrinterQueue,self.cameraToRasterQueue)
         
         '''state thread'''
