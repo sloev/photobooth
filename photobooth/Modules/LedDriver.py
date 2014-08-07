@@ -8,45 +8,42 @@ import threading,time
 
 class LedDriver(object):
 
-    def __init__(self,pwmLed):
-        self.pwmLed=pwmLed
-        self.currentDutyCycle=0
-        self.pwmThread=threading.Thread(target=self.fade, args=(1,))
+    def __init__(self,q1,q2):
+        self.q1=q1
+        self.q2=q2
+        self.q3=q3
+        self.ledPin=18
+        self.pwmThread=threading.Thread(target=self.fade)
 
     def fadeUp(self):
-        self.pwmThread=threading.Thread(target=self.fade, args=(1,))
+        self.pwmThread=threading.Thread(target=self.fade)
         self.pwmThread.daemon=True
         self.pwmThread.start()
     
-    def fadeDown(self):
-        self.pwmThread=threading.Thread(target=self.fade, args=(100,))
-        self.pwmThread.daemon=True
-        self.pwmThread.start()
-                
     def fade(self,dutyCycle):
-        step=1
-        if dutyCycle<self.currentDutyCycle:
-            step=-1
-        for i in range(self.currentDutyCycle,dutyCycle,step):
-            self.pwmLed.ChangeDutyCycle(i)
+        blaster_file = open("/dev/pi-blaster", "a")
+        for i in range(0,100,1):
+            blaster_file.write("%d=%d"%(self.ledPin,i))
             time.sleep(0.2)
-        self.currentDutyCycle=dutyCycle
+        blaster_file.close()
+        time.sleep(1)
+        while(not self.q1.empty() and not self.q2.empty()):
+            time.sleep(0.1)
+        for i in range(100,0,-1):
+            blaster_file.write("%d=%d\n"%(self.ledPin,i))
+            time.sleep(0.2)
 
 def main():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(2, GPIO.OUT) 
-
-    p = GPIO.PWM(2,1)        
-
-    p.start(0)    
-    
-    ledDriver=LedDriver(p)
+    import Queue
+    q1=Queue.Queue()
+    q2=Queue.Queue()
+    ledDriver=LedDriver(q1,q2)
     ledDriver.fadeUp()
     time.sleep(5)
-    ledDriver.fadeDown()
+    tmp=q1.get()
+    tmp=q2.get()
     time.sleep(5)
-    p.stop()
-    GPIO.cleanup()
+    print "finnished"
 
 if __name__ == '__main__':
     main()
