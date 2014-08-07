@@ -36,7 +36,7 @@ class LedDriver(object):
             time.sleep(0.01)
         #self.pwmLed.stop(100)
         print "faded up"
-        time.sleep(3)#wait for camera to shoot one picture
+        time.sleep(10)#wait for camera to shoot one picture
         print "led going in wait loop"
         while((not self.q1.empty()) or (not self.q2.empty())):
             time.sleep(0.1)
