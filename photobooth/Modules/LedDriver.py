@@ -49,7 +49,10 @@ class LedDriver(object):
 
 
 def main():
+    GPIO.setmode(GPIO.BCM)
+
     GPIO.setup(18,GPIO.OUT)
+    
     pwmLed=GPIO.PWM(18,0)
     q1=Queue.Queue()
     q1.put("")
