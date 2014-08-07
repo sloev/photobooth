@@ -63,6 +63,7 @@ def main():
     time.sleep(10)
     tmp=q1.get()
     tmp=q2.get()
+    print"removed objects"
     time.sleep(5)
     print "finnished"
 
