@@ -53,7 +53,7 @@ def main():
 
     GPIO.setup(18,GPIO.OUT)
     
-    pwmLed=GPIO.PWM(18,100)
+    pwmLed=GPIO.PWM(18,1000)
     q1=Queue.Queue()
     q1.put("")
     q2=Queue.Queue()
