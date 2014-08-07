@@ -2,6 +2,9 @@
 Created on Aug 6, 2014
 
 @author: johannes
+uses
+https://github.com/sarfata/pi-blaster/
+
 '''
 import RPi.GPIO as GPIO
 import threading,time
@@ -11,7 +14,6 @@ class LedDriver(object):
     def __init__(self,q1,q2):
         self.q1=q1
         self.q2=q2
-        self.q3=q3
         self.ledPin=18
         self.pwmThread=threading.Thread(target=self.fade)
 
