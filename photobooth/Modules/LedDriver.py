@@ -31,7 +31,6 @@ class LedDriver(object):
             value=i/1000.0
             blaster_file.write("%d=%f\n"%(self.ledPin,value))
             time.sleep(0.001)
-        time.sleep(1)
         print "faded up"
         while(not self.q1.empty() and not self.q2.empty()):
             time.sleep(0.1)

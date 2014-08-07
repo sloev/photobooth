@@ -11,6 +11,7 @@ from Modules.Facebook import Facebook
 from Modules.ImageProcessor import ImageProcessor
 from Modules.SimpleThermalPrinter import SimpleThermalPrinter
 from Modules.Picamera import Picamera
+from Modules.LedDriver import LedDriver
 import Queue
 import json,time,threading, sys, select
 import datetime
@@ -60,6 +61,8 @@ class Photobooth(object):
         print "init printer"
         self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
         
+        self.ledDriver=LedDriver(self.rasterToPrinterQueue,self.cameraToRasterQueue)
+        
         '''state thread'''
 
     def startShoot(self):
@@ -79,6 +82,7 @@ class Photobooth(object):
     def shoot(self):
         print "shooting"
         self.picamera.captureFourImagesThreaded()
+        self.ledDriver.fadeUp()
         print "told camera to shoot"
         
         #facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
