@@ -7,7 +7,9 @@ https://github.com/sarfata/pi-blaster/
 
 '''
 import RPi.GPIO as GPIO
-import threading,time
+import threading
+import time
+import Queue
 
 class LedDriver(object):
 
@@ -27,7 +29,6 @@ class LedDriver(object):
         for i in range(0,100,1):
             blaster_file.write("%d=%d"%(self.ledPin,i))
             time.sleep(0.2)
-        blaster_file.close()
         time.sleep(1)
         while(not self.q1.empty() and not self.q2.empty()):
             time.sleep(0.1)
@@ -35,9 +36,10 @@ class LedDriver(object):
             string="%d=%d\n"%(self.ledPin,i)
             blaster_file.write(string)
             time.sleep(0.2)
+        blaster_file.close()
+
 
 def main():
-    import Queue
     q1=Queue.Queue()
     q1.put("")
     q2=Queue.Queue()
