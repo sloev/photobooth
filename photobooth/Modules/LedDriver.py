@@ -21,7 +21,7 @@ class LedDriver(object):
 
     def fadeUp(self):
         self.pwmThread=threading.Thread(target=self.fade)
-        self.pwmThread.daemon=True
+        #self.pwmThread.daemon=True
         self.pwmThread.start()
     
     def fade(self):
