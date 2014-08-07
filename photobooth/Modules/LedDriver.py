@@ -34,11 +34,11 @@ class LedDriver(object):
             #blaster_file.write("%d=%f\n"%(self.ledPin,value))
             self.pwmLed.ChangeDutyCycle(i)
             time.sleep(0.01)
-        self.pwmLed.stop(100)
+        #self.pwmLed.stop(100)
         print "faded up"
         while(not self.q1.empty() and not self.q2.empty()):
             time.sleep(0.1)
-        self.pwmLed.start(100)
+        #self.pwmLed.start(100)
         for i in range(100,-1,-1):
             self.pwmLed.ChangeDutyCycle(i)
             #blaster_file.write("%d=%f\n"%(self.ledPin,value))
@@ -53,7 +53,7 @@ def main():
 
     GPIO.setup(18,GPIO.OUT)
     
-    pwmLed=GPIO.PWM(18,200)
+    pwmLed=GPIO.PWM(18,100)
     q1=Queue.Queue()
     q1.put("")
     q2=Queue.Queue()
