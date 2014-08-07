@@ -39,7 +39,9 @@ class LedDriver(object):
 def main():
     import Queue
     q1=Queue.Queue()
+    q1.put("")
     q2=Queue.Queue()
+    q2.put("")
     ledDriver=LedDriver(q1,q2)
     ledDriver.fadeUp()
     time.sleep(5)
