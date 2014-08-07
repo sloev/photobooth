@@ -40,6 +40,7 @@ class LedDriver(object):
         print "led going in wait loop"
         while((not self.q1.empty()) or (not self.q2.empty())):
             time.sleep(0.1)
+        time.sleep(4)
         print "queues empty"
         #self.pwmLed.start(100)
         for i in range(100,-1,-1):
