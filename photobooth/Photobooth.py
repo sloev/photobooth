@@ -60,8 +60,9 @@ class Photobooth(object):
         self.picamera=Picamera( self.quitEvent, self.cameraToRasterQueue,self.cameraToSocialPreprocessorQueue)
         print "init printer"
         self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
-        
-        self.ledDriver=LedDriver(self.rasterToPrinterQueue,self.cameraToRasterQueue)
+        GPIO.setup(18,GPIO.OUT)
+        pwmLed=GPIO.PWM(18,0)
+        self.ledDriver=LedDriver(pwmLed,self.rasterToPrinterQueue,self.cameraToRasterQueue)
         
         '''state thread'''
 
@@ -134,11 +135,7 @@ def main():
                 time.sleep(0.2)
                 if(GPIO.input(4)==0):
                     photobooth.startShoot()
-        #    while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-         #       c = sys.stdin.readline()
-          #      c=c[0:1]
-           #     if(c=='s'): 
-            #        photobooth.startShoot()
+
     except KeyboardInterrupt:
         print("exiting")
         photobooth.stopShoot()
