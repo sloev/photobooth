@@ -22,7 +22,7 @@ class LedDriver(object):
         self.pwmThread.daemon=True
         self.pwmThread.start()
     
-    def fade(self,dutyCycle):
+    def fade(self):
         blaster_file = open("/dev/pi-blaster", "a")
         for i in range(0,100,1):
             blaster_file.write("%d=%d"%(self.ledPin,i))
