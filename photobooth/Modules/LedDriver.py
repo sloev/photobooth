@@ -40,10 +40,15 @@ class LedDriver(object):
         print "led going in wait loop"
         while((not self.q1.empty()) or (not self.q2.empty())):
             time.sleep(0.1)
-        time.sleep(4)
         print "queues empty"
+
+        for i in range(100,49,-1):
+            self.pwmLed.ChangeDutyCycle(i)
+            #blaster_file.write("%d=%f\n"%(self.ledPin,value))
+            time.sleep(0.01)
+        time.sleep(4)
         #self.pwmLed.start(100)
-        for i in range(100,-1,-1):
+        for i in range(50,-1,-1):
             self.pwmLed.ChangeDutyCycle(i)
             #blaster_file.write("%d=%f\n"%(self.ledPin,value))
             time.sleep(0.01)
