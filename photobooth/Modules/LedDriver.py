@@ -38,6 +38,7 @@ class LedDriver(object):
         print "faded up"
         while(not self.q1.empty() and not self.q2.empty()):
             time.sleep(0.1)
+        print "queues empty"
         #self.pwmLed.start(100)
         for i in range(100,-1,-1):
             self.pwmLed.ChangeDutyCycle(i)
