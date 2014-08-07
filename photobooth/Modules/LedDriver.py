@@ -32,7 +32,8 @@ class LedDriver(object):
         while(not self.q1.empty() and not self.q2.empty()):
             time.sleep(0.1)
         for i in range(100,0,-1):
-            blaster_file.write("%d=%d\n"%(self.ledPin,i))
+            string="%d=%d\n"%(self.ledPin,i)
+            blaster_file.write(string)
             time.sleep(0.2)
 
 def main():
