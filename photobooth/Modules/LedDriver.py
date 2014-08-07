@@ -26,7 +26,7 @@ class LedDriver(object):
     
     def fade(self):
         print "opening piblaster in thread"
-        blaster_file = open("/tmp/pi-blaster", "a")
+        blaster_file = open("/dev/pi-blaster", "a")
         for i in range(0,1000,1):
             value=i/1000.0
             blaster_file.write("%d=%f\n"%(self.ledPin,value))
