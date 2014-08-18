@@ -12,6 +12,7 @@ import sched
 import os
 import time,datetime
 import glob
+import sys,signal
 
 '''
 todo:
@@ -97,18 +98,23 @@ class UploadServer(object):
 
                 
     
-    def stopAll(self):
+    def stopAll(self,signal=None,frame=None):
         map(self.scheduler.cancel,self.scheduler.queue)
         self.uploadThread.join()
+        print "shutting down uploadserver.py"
+        sys.exit()
     
         
 def main():
     up=UploadServer()
+    signal.signal(signal.SIGTERM,up.stopAll)
+    signal.signal(signal.SIGINT,up.stopAll)
+
     try:
         while True:
             time.sleep(1)
-    except KeyboardInterrupt:
-        up.stopAll()
+    finally:# KeyboardInterrupt:
+        pass#up.stopAll()
     print "exited"
         
 if __name__ == '__main__':

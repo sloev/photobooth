@@ -80,10 +80,7 @@ class Photobooth(object):
         self.cameraToSocialPreprocessorQueue.put(None)
         GPIO.cleanup()
 
-        print "shutting down"
-        f = open('log.shutdown.txt','w')
-        f.write('shutdown')
-        f.close()
+        print "shutting down photobooth.py"
         sys.exit()
         #self.stateThread.join()
 
@@ -134,6 +131,7 @@ def main():
     time.sleep(1)
     photobooth=Photobooth()
     signal.signal(signal.SIGTERM,photobooth.stopShoot)
+    signal.signal(signal.SIGINT,photobooth.stopShoot)
 
     print("press s to shoot")
     
