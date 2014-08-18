@@ -34,15 +34,15 @@ class LedDriver(object):
     
     def fade(self,direction):
         if direction:
-            for i in range(1024,-1,-1):
+            for i in range(1000,-1,-1):
                 #self.pwmLed.ChangeDutyCycle(i)
                 led.pwmWrite(18,i)
-                time.sleep(0.01)
+                time.sleep(0.005)
         else:
-            for i in range(0,1025,1):
+            for i in range(0,1001,1):
                 #self.pwmLed.ChangeDutyCycle(i)
                 led.pwmWrite(18,i)
-                time.sleep(0.01)
+                time.sleep(0.005)
 
 def main():
     print "does not work"
