@@ -25,7 +25,7 @@ class Facebook(object):
 
             #print ("token:"+str(token[0]))
         except:
-            self.facebook=None
+            pass#self.facebook=None
 
     def uploadImage(self,messageStr,imagePath):
         print("uploading to facebook")
