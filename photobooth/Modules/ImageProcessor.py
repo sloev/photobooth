@@ -240,7 +240,7 @@ class ImageProcessor(object):
         pixelArray=img.load()
         pixels=[0]*(width*height)
 
-        threshold = 100*[0] + 156*[255]
+        threshold = 156*[0] + 100*[255]
         
         print "starting to dither"
         for y in range(height):
