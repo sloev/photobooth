@@ -40,7 +40,6 @@ class Picamera(object):
         
     def captureFourImagesThreaded(self,intervalSeconds=1):
         self.ledDriver.fadeUp()
-        time.sleep(1)
         self.captureThread=threading.Thread(target=self.captureFourImages, args=(intervalSeconds,))
         #self.captureThread.daemon=True
         self.captureThread.start()
@@ -48,6 +47,8 @@ class Picamera(object):
     def captureFourImages(self,intervalSeconds=1):
         print "inside camera capture"
         images=[]
+        time.sleep(2)#wait for led to fade up
+
         
         for i in range(4):
             print "making stream"
