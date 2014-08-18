@@ -13,7 +13,7 @@ import Queue
 
 class LedDriver(object):
 
-    def __init__(self,pwmLed,q1,q2):
+    def __init__(self,pwmLed):
         self.q1=q1
         self.q2=q2
         self.pwmLed=pwmLed
