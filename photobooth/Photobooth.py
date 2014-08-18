@@ -13,7 +13,7 @@ from Modules.SimpleThermalPrinter import SimpleThermalPrinter
 from Modules.Picamera import Picamera
 from Modules.LedDriver import LedDriver
 import Queue
-import json,time,threading, sys, select
+import json,time,threading, sys, signal, select
 import datetime
 import RPi.GPIO as GPIO
 
@@ -73,11 +73,18 @@ class Photobooth(object):
         else:
             print("busy shooting")
         
-    def stopShoot(self):
+    def stopShoot(self,signum=None, frame=None):
         self.quitEvent.set()
         self.cameraToRasterQueue.put(None)
         self.rasterToPrinterQueue.put(None)
         self.cameraToSocialPreprocessorQueue.put(None)
+        GPIO.cleanup()
+
+        print "shutting down"
+        f = open('log.shutdown.txt','w')
+        f.write('shutdown')
+        f.close()
+        sys.exit()
         #self.stateThread.join()
 
     def shoot(self):
@@ -126,6 +133,8 @@ class Photobooth(object):
 def main():
     time.sleep(1)
     photobooth=Photobooth()
+    signal.signal(signal.SIGTERM,photobooth.stopShoot)
+
     print("press s to shoot")
     
     try:
@@ -136,9 +145,10 @@ def main():
                 if(GPIO.input(4)==0):
                     photobooth.startShoot()
 
-    except KeyboardInterrupt:
-        print("exiting")
-        photobooth.stopShoot()
-        GPIO.cleanup()
+    finally :#KeyboardInterrupt:
+        pass
+        #print("exiting")
+        #photobooth.stopShoot()
+        #GPIO.cleanup()
 if __name__ == '__main__':
     main()
