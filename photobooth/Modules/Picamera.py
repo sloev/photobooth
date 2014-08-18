@@ -32,6 +32,7 @@ class Picamera(object):
         self.quitEvent=quitEvent
         time.sleep(2)
         self.captureThread=threading.Thread()
+        self.snippet=Image.open(os.getcwd()+"/templates/snippet.png")
         
     def isCaptureThreadRunning(self):
         return self.captureThread.isAlive()
