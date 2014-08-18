@@ -57,9 +57,9 @@ class Photobooth(object):
         print "init imageprocessor and social preprocessor"
         self.imageProcessor=ImageProcessor( self.quitEvent, self.cameraToRasterQueue, self.rasterToPrinterQueue, self.cameraToSocialPreprocessorQueue)
         print "init picamera"
-        GPIO.setup(18,GPIO.OUT)
-        pwmLed=GPIO.PWM(18,2000)
-        ledDriver=LedDriver(pwmLed)
+        #GPIO.setup(18,GPIO.OUT)
+        #pwmLed=GPIO.PWM(18,2000)
+        ledDriver=LedDriver()
         self.picamera=Picamera( self.quitEvent, self.cameraToRasterQueue,self.cameraToSocialPreprocessorQueue,ledDriver)
         print "init printer"
         self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)

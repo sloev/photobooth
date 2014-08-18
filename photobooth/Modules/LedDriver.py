@@ -6,18 +6,20 @@ uses
 https://github.com/sarfata/pi-blaster/
 
 '''
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import threading
 import time
-import Queue
+import wiringpi2 as led
 
 class LedDriver(object):
 
-    def __init__(self,pwmLed):
+    def __init__(self):
+        led.wiringPiSetupGpio()
+        led.pinMode(18, 2)      # sets GPIO 24 to output
 
-        self.pwmLed=pwmLed
+        #self.pwmLed=pwmLed
         
-        self.ledPin=18
+        #self.ledPin=18
         self.pwmThread=threading.Thread(target=self.fade)
 
     def fadeUp(self):
@@ -32,14 +34,14 @@ class LedDriver(object):
     
     def fade(self,direction):
         if direction:
-            for i in range(100,-1,-1):
-                self.pwmLed.ChangeDutyCycle(i)
+            for i in range(1024,-1,-1):
+                #self.pwmLed.ChangeDutyCycle(i)
+                led.pwmWrite(18,i)
                 time.sleep(0.01)
-            self.pwmLed.stop(0)
         else:
-            self.pwmLed.start(0)
-            for i in range(0,101,1):
-                self.pwmLed.ChangeDutyCycle(i)
+            for i in range(0,1025,1):
+                #self.pwmLed.ChangeDutyCycle(i)
+                led.pwmWrite(18,i)
                 time.sleep(0.01)
 
 def main():
