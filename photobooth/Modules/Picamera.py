@@ -64,8 +64,8 @@ class Picamera(object):
                 self.cameraToRasterQueue.put(images[i])
             if self.quitEvent.is_set():
                 break
-        whitespace = Image.new('RGB', (384,180), (255,255,255))
-        self.cameraToRasterQueue.put(whitespace)
+       # whitespace = Image.new('RGB', (384,180), (255,255,255))
+        self.cameraToRasterQueue.put(self.snippet)
         
         self.socialPreprocessorQueue.put(images)
 
