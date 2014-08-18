@@ -19,7 +19,7 @@ class Picamera(object):
     '''
 
 
-    def __init__(self,quitEvent,cameraToRasterQueue,socialPreprocessorQueue):
+    def __init__(self,quitEvent,cameraToRasterQueue,socialPreprocessorQueue,ledDriver):
         '''
         Constructor
         '''
@@ -33,7 +33,8 @@ class Picamera(object):
         time.sleep(2)
         self.captureThread=threading.Thread()
         self.snippet=Image.open(os.getcwd()+"/templates/snippet.png")
-        
+        self.ledDriver=ledDriver
+
     def isCaptureThreadRunning(self):
         return self.captureThread.isAlive()
         
@@ -41,11 +42,9 @@ class Picamera(object):
         self.captureThread=threading.Thread(target=self.captureFourImages, args=(intervalSeconds,))
         #self.captureThread.daemon=True
         self.captureThread.start()
+        self.ledDriver.fadeUp()
 
     def captureFourImages(self,intervalSeconds=1):
-        #mydir = os.path.join(self.current_dir, "pi3cs/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-        #os.makedirs(mydir)
-        #os.chdir(mydir)
         print "inside camera capture"
         images=[]
         
@@ -64,14 +63,7 @@ class Picamera(object):
                 self.cameraToRasterQueue.put(images[i])
             if self.quitEvent.is_set():
                 break
-       # whitespace = Image.new('RGB', (384,180), (255,255,255))
         self.cameraToRasterQueue.put(self.snippet)
         
         self.socialPreprocessorQueue.put(images)
-
-        #mydir = os.path.join(self.current_dir, "pics/"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-        #os.makedirs(mydir)
-        #os.chdir(mydir)
-        #print("saving images")
-        #for i in range(len(images)):
-        #    images[i].save(str(i)+".jpg")
+        self.ledDriver.fadeDown()

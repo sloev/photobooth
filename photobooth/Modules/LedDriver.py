@@ -22,37 +22,29 @@ class LedDriver(object):
         self.pwmThread=threading.Thread(target=self.fade)
 
     def fadeUp(self):
-        self.pwmThread=threading.Thread(target=self.fade)
+        self.pwmThread=threading.Thread(target=self.fade,args=(0,))
+        self.pwmThread.daemon=True
+        self.pwmThread.start()
+
+    def fadeDown(self):
+        self.pwmThread=threading.Thread(target=self.fade,args=(1,))
         self.pwmThread.daemon=True
         self.pwmThread.start()
     
-    def fade(self):
-        self.pwmLed.start(0)
-        print "opening piblaster in thread"
-        #blaster_file = open("/dev/pi-blaster", "a")
-        for i in range(0,101,1):
-            #blaster_file.write("%d=%f\n"%(self.ledPin,value))
-            self.pwmLed.ChangeDutyCycle(i)
-            time.sleep(0.01)
-        #self.pwmLed.stop(100)
-        print "faded up"
-        time.sleep(10)#wait for camera to shoot one picture
-        print "led going in wait loop"
-        while((not self.q1.empty()) or (not self.q2.empty())):
-            time.sleep(0.1)
-        print "queues empty"
-        time.sleep(4)
-        #self.pwmLed.start(100)
-        for i in range(100,-1,-1):
-            self.pwmLed.ChangeDutyCycle(i)
-            #blaster_file.write("%d=%f\n"%(self.ledPin,value))
-            time.sleep(0.01)
-        print "faded down"
-      #  blaster_file.close()
-        self.pwmLed.stop(0)
-
+    def fade(self,direction):
+        if direction:
+            for i in range(100,-1,-1):
+                self.pwmLed.ChangeDutyCycle(i)
+                time.sleep(0.01)
+            self.pwmLed.stop(0)
+        else:
+            self.pwmLed.start(0)
+            for i in range(0,101,1):
+                self.pwmLed.ChangeDutyCycle(i)
+                time.sleep(0.01)
 
 def main():
+    print "does not work"
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(18,GPIO.OUT)

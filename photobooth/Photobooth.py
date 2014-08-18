@@ -57,12 +57,13 @@ class Photobooth(object):
         print "init imageprocessor and social preprocessor"
         self.imageProcessor=ImageProcessor( self.quitEvent, self.cameraToRasterQueue, self.rasterToPrinterQueue, self.cameraToSocialPreprocessorQueue)
         print "init picamera"
-        self.picamera=Picamera( self.quitEvent, self.cameraToRasterQueue,self.cameraToSocialPreprocessorQueue)
-        print "init printer"
-        self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
         GPIO.setup(18,GPIO.OUT)
         pwmLed=GPIO.PWM(18,2000)
-        self.ledDriver=LedDriver(pwmLed,self.rasterToPrinterQueue,self.cameraToRasterQueue)
+        ledDriver=LedDriver(pwmLed)
+        self.picamera=Picamera( self.quitEvent, self.cameraToRasterQueue,self.cameraToSocialPreprocessorQueue,ledDriver)
+        print "init printer"
+        self.printer=SimpleThermalPrinter( self.quitEvent, self.rasterToPrinterQueue)
+
         
         '''state thread'''
 
@@ -87,44 +88,7 @@ class Photobooth(object):
     def shoot(self):
         print "shooting"
         self.picamera.captureFourImagesThreaded()
-        self.ledDriver.fadeUp()
-        print "told camera to shoot"
-        
-        #facebookImageAndString=self.imageProcessor.composeForFacebook(dir)
-        #twitterImageAndString=self.imageProcessor.composeForTwitter(dir)
-        
-        #dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-        
-        '''token=self.imageProcessor.saveImageToOutgoing(
-                           dateString,
-                           [
-                            facebookImageAndString,
-                            twitterImageAndString
-                            ],dir)
-                        '''
-        #pixels=self.imageProcessor.composeForPrinterReturnPixelArrays(dir,2)
-        #for pixelarray in pixels:
-         #   self.printer.printPixelArray(pixelarray)
-        
-        '''chdk shooting and downloading'''
-        #photoDir=self.camera.captureReturnDir()
-        #message="Testing "+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        
-        '''make photoframe'''
-        
-        '''upload two first images to twitter'''
-        #imagePath=self.image_processor.composeForTwitter(photoDir)
-        #self.twitter.uploadImage(message,imagePath)
-        
-        #imagePath=self.image_processor.composeForFacebook(photoDir)
-        #self.facebook.uploadImage(message,imagePath)
-        
-        '''make photostrip'''
-       # image_paths=self.image_processor.composeForPrinter(photoDir)
-        
-        '''print photos'''
-        #self.printer.printPhotoStrip(image_paths)
-        print "press s to shoot"
+        print "ready"
 
         
 def main():
