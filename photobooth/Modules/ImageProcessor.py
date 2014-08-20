@@ -87,7 +87,20 @@ class ImageProcessor(object):
                                                                facebookImageAndString,
                                                                twitterImageAndString
                                                               ])
-                        
+                self.uploadToInstagram(images[0])
+    def uploadToInstagram(self,image):
+        print"trying to save photo to insta sync folder"
+        path="/home/pi/instagramSync/*.jpg"
+        files=glob.glob(path)
+        if len(files)<1:
+            dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+            path=os.path.join(path,dateString+'.jpg')
+            image.save(path,'JPG')
+            print "insta-image saves as: %s" %path
+        else:
+            print "insta folder allready contains photo"
+
+
     
     def consumerAndPixelProducer(self):
         while not self.quitEvent.is_set():
