@@ -90,12 +90,13 @@ class ImageProcessor(object):
                 self.uploadToInstagram(images[0])
     def uploadToInstagram(self,image):
         print"trying to save photo to insta sync folder"
-        path="/home/pi/instagramSync/*.jpg"
+        path="/home/pi/instagramSync/"
+        searchpath=path+"*.jpg"
         files=glob.glob(path)
         if len(files)<1:
             dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
-            path=os.path.join(path,dateString+'.jpg')
-            image.save(path,'JPEG')
+            savepath=os.path.join(searchpath,dateString+'.jpg')
+            image.save(savepath,'JPEG')
             print "insta-image saves as: %s" %path
         else:
             print "insta folder allready contains photo"
