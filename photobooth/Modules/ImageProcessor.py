@@ -95,7 +95,7 @@ class ImageProcessor(object):
         if len(files)<1:
             dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
             path=os.path.join(path,dateString+'.jpg')
-            image.save(path,'JPG')
+            image.save(path,'JPEG')
             print "insta-image saves as: %s" %path
         else:
             print "insta folder allready contains photo"
