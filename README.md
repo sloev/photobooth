@@ -15,3 +15,9 @@ uses
 * split between shooting and uploading capabilities using the tmp folder for temporary storage guaranties eternal running :-)
 
 
+see 
+facebook.com/loppenbooth
+twitter.com/loppenbooth
+instagram.com/loppenbooth
+
+currently installed at secret location in christiania, denmark
