@@ -94,7 +94,7 @@ class ImageProcessor(object):
         searchpath=path+"*.jpg"
         files=glob.glob(searchpath)
         if len(files)<1:
-            dateString=datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+            dateString="Zimage"+datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
             savepath=os.path.join(path,dateString+'.jpg')
             image.save(savepath,'JPEG')
             print "insta-image saves as: %s" %path
