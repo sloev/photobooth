@@ -106,7 +106,7 @@ def main():
                 time.sleep(0.2)
                 if(GPIO.input(4)==0):
                     photobooth.startShoot()
-             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
                 c = sys.stdin.readline()
                 c=c[0:1]
                 if(c=='s'):
