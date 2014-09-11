@@ -4,7 +4,7 @@ Created on Mar 19, 2014
 @author: johannes
 '''
 import Image
-import ImageFont, ImageDraw, ImageOps,ImageChops
+import ImageFont, ImageDraw, ImageOps,ImageChops, ImageEnhance
 import os,glob
 from Twitter import Twitter
 from Facebook import Facebook
@@ -24,7 +24,7 @@ class ImageProcessor(object):
         Constructor
         '''
         '''getting ip'''
-        self.grey=False
+        self.grey=True
        # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #s.connect(("gmail.com",80))
         self.ip=None#s.getsockname()[0]
@@ -129,6 +129,10 @@ class ImageProcessor(object):
             #img = ImageOps.autocontrast(img, cutoff=2)
             if self.grey:
                 img=ImageOps.grayscale(img)
+                img=ImageEnhance.Brightness(img)
+                img.enhance(0.9)
+                img=ImageEnhance.Contrast(img)
+                img.enhance(1.2)
             
             strip.paste(img,(posX,5))
             count=count+1
@@ -162,6 +166,10 @@ class ImageProcessor(object):
             #img = ImageOps.autocontrast(img, cutoff=2)
             if self.grey:
                 img=ImageOps.grayscale(img)
+                img=ImageEnhance.Brightness(img)
+                img.enhance(0.9)
+                img=ImageEnhance.Contrast(img)
+                img.enhance(1.2)
             strip.paste(img,(posX,posY))
             count=count+1        
         overlay=self.facebookLayout["overlay"]
