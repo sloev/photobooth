@@ -89,6 +89,7 @@ class ImageProcessor(object):
                                                               ])
                 self.uploadToInstagram(images[0])
     def uploadToInstagram(self,image):
+        pass
         print"trying to save photo to insta sync folder"
         path="/home/pi/instagramSync/"
         searchpath=path+"*.jpg"
