@@ -130,10 +130,10 @@ class ImageProcessor(object):
             #img = ImageOps.autocontrast(img, cutoff=2)
             if self.grey:
                 img=ImageOps.grayscale(img)
-                img=ImageEnhance.Brightness(img)
-                img.enhance(0.9)
-                img=ImageEnhance.Contrast(img)
-                img.enhance(1.2)
+                enh=ImageEnhance.Brightness(img)
+                img=enh.enhance(0.9)
+                enh=ImageEnhance.Contrast(img)
+                img=enh.enhance(1.2)
             
             strip.paste(img,(posX,5))
             count=count+1
@@ -167,10 +167,10 @@ class ImageProcessor(object):
             #img = ImageOps.autocontrast(img, cutoff=2)
             if self.grey:
                 img=ImageOps.grayscale(img)
-                img=ImageEnhance.Brightness(img)
-                img.enhance(0.9)
-                img=ImageEnhance.Contrast(img)
-                img.enhance(1.2)
+                enh=ImageEnhance.Brightness(img)
+                img=enh.enhance(0.9)
+                enh=ImageEnhance.Contrast(img)
+                img=enh.enhance(1.2)
             strip.paste(img,(posX,posY))
             count=count+1        
         overlay=self.facebookLayout["overlay"]
