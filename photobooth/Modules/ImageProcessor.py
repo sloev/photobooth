@@ -87,7 +87,7 @@ class ImageProcessor(object):
                                                                facebookImageAndString,
                                                                twitterImageAndString
                                                               ])
-                self.uploadToInstagram(images[0])
+                #self.uploadToInstagram(images[0])
     def uploadToInstagram(self,image):
         pass
         print"trying to save photo to insta sync folder"
@@ -131,9 +131,9 @@ class ImageProcessor(object):
             if self.grey:
                 img=ImageOps.grayscale(img)
                 enh=ImageEnhance.Brightness(img)
-                img=enh.enhance(0.9)
+                img=enh.enhance(0.8)
                 enh=ImageEnhance.Contrast(img)
-                img=enh.enhance(1.2)
+                img=enh.enhance(1.3)
             
             strip.paste(img,(posX,5))
             count=count+1
@@ -168,9 +168,9 @@ class ImageProcessor(object):
             if self.grey:
                 img=ImageOps.grayscale(img)
                 enh=ImageEnhance.Brightness(img)
-                img=enh.enhance(0.9)
+                img=enh.enhance(0.8)
                 enh=ImageEnhance.Contrast(img)
-                img=enh.enhance(1.2)
+                img=enh.enhance(1.3)
             strip.paste(img,(posX,posY))
             count=count+1        
         overlay=self.facebookLayout["overlay"]
